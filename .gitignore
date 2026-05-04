@@ -5,7 +5,7 @@ tmp/
 
 # Ignore
 tmp-status-check
-tmp-codex-kit-test
+tmp-codexkit-test
 test
 
 dist

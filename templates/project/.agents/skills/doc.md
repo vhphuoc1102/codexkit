@@ -1,6 +1,6 @@
 # Codex Skills
 
-> Guide to creating and using skills in this Codex Kit repository
+> Guide to creating and using skills in this CodexKit repository
 
 ---
 

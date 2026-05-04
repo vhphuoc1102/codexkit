@@ -1,6 +1,6 @@
-# Codex Kit Architecture
+# CodexKit Architecture
 
-This document describes the project-level structure installed by Codex Kit and how the main pieces work together.
+This document describes the project-level structure installed by CodexKit and how the main pieces work together.
 
 ## Overview
 
@@ -30,13 +30,11 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 │   │   ├── frontend-design/
 │   │   ├── api-patterns/
 │   │   ├── database-design/
+│   │   ├── impeccable/
 │   │   ├── planning/
 │   │   ├── release-readiness/
 │   │   └── testing-patterns/
 │   ├── .shared/
-│   │   └── ui-ux-pro-max/
-│   │       ├── data/
-│   │       └── scripts/
 │   └── workflows/
 │       ├── brainstorm.md
 │       ├── check.md
@@ -48,10 +46,11 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 │       ├── plan.md
 │       ├── preview.md
 │       ├── review.md
+│       ├── impeccable.md
+│       ├── screen-spec.md
 │       ├── ship.md
 │       ├── status.md
 │       ├── test.md
-│       ├── ui-ux-pro-max.md
 │       └── verify.md
 ├── .codex/
 │   ├── config.toml
@@ -72,7 +71,7 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 │       ├── security-auditor.toml
 │       ├── seo-specialist.toml
 │       └── test-writer.toml
-└── .codex-kit/
+└── .codexkit/
     └── manifest.json
 ```
 
@@ -132,7 +131,9 @@ Workflows should encode process, not domain knowledge.
 
 Shared packages live in `.agents/.shared/`.
 
-Use them when a workflow needs executable tooling or structured datasets that do not naturally belong to a single skill. The imported `ui-ux-pro-max` package is an example: it bundles CSV knowledge bases and Python search scripts used by the UI workflow.
+Use them when a workflow needs executable tooling or structured datasets that do not naturally belong to a single skill.
+
+Impeccable is intentionally shipped as a skill at `.agents/skills/impeccable/`, not as a shared package, because it owns a full instruction contract, references, and helper scripts for UI/UX work. Its upstream attribution and Apache 2.0 license notes live in `.agents/skills/impeccable/NOTICE.md`.
 
 ### Subagents
 
@@ -169,7 +170,7 @@ The default scaffold includes a ready-to-use Context7 MCP entry and commented ex
 
 ### Manifest
 
-`.codex-kit/manifest.json` tracks kit-managed files. It enables:
+`.codexkit/manifest.json` tracks kit-managed files. It enables:
 
 - `status` to report missing, modified, and outdated managed files
 - `update` to refresh only safe targets

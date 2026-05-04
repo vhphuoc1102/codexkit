@@ -25,7 +25,7 @@ Before starting, confirm:
 - the target code surface in the repository is known
 - the relevant design system, component library, or token source is discoverable
 
-If those conditions are not met, route first to `plan` or `ui-ux-pro-max`.
+If those conditions are not met, route first to `plan`, `screen-spec`, or `impeccable`.
 
 ## Process
 

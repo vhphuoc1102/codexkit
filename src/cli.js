@@ -31,51 +31,51 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 
 function printHelp() {
-  console.log(`Usage: codex-kit <command> [options]
+  console.log(`Usage: codexkit <command> [options]
 
 Primary commands:
   init
-            Install the Codex Kit scaffold into the target project
+            Install the CodexKit scaffold into the target project
   install
-            Same as \`init\`; installs the Codex Kit scaffold into the target project
+            Same as \`init\`; installs the CodexKit scaffold into the target project
   install --target plugin
-            Install only the Codex Kit workspace plugin into the target project
+            Install only the CodexKit workspace plugin into the target project
   install --target mcp
             Install the shipped MCP bundle into the project \`.codex/config.toml\`
   install --target skills
-            Install only the shipped Codex Kit project skills into the target project
+            Install only the shipped CodexKit project skills into the target project
   install --target skills --scope local
-            Install shipped Codex Kit skills into local Codex
+            Install shipped CodexKit skills into local Codex
   install --target mcp --scope local
             Install the shipped MCP bundle into \`\${CODEX_HOME}/config.toml\`
   update
             Refresh scaffold-managed files in the target project
   sync --target plugin
-            Sync the Codex Kit workspace plugin in the target project
+            Sync the CodexKit workspace plugin in the target project
   sync --target mcp
             Sync the shipped MCP bundle in the project \`.codex/config.toml\`
   sync --target skills
-            Sync the shipped Codex Kit project skills in the target project
+            Sync the shipped CodexKit project skills in the target project
   sync --target skills --scope local
-            Overwrite local Codex skills with the shipped Codex Kit version
+            Overwrite local Codex skills with the shipped CodexKit version
   sync --target mcp --scope local
             Sync the shipped MCP bundle in \`\${CODEX_HOME}/config.toml\`
   list --target skills
-            List shipped Codex Kit skills grouped by category
+            List shipped CodexKit skills grouped by category
   list --target skills --scope local
-            List shipped Codex Kit skills currently installed in local Codex
+            List shipped CodexKit skills currently installed in local Codex
   list --target plugin
             Show workspace plugin status for the target project
   list --target mcp
             Show shipped MCP bundle status for project or local Codex config
   remove --target skills --scope local --skills <list>
-            Remove specific Codex Kit skills from local Codex
+            Remove specific CodexKit skills from local Codex
 
 Dedicated mixed-scope commands:
   setup-codex
             Scaffold the workspace plugin and install shipped skills locally
   sync-codex
-            Sync the workspace plugin and local shipped skills after upgrading Codex Kit
+            Sync the workspace plugin and local shipped skills after upgrading CodexKit
   status
             Show scaffold-managed file status for the target project
 
@@ -340,7 +340,7 @@ async function getPackageVersion() {
 function printCatalog(skills, installCommandPrefix) {
   const grouped = groupSkillsByCategory(skills);
 
-  console.log(`Project scope: shipped Codex Kit skills: ${skills.length}`);
+  console.log(`Project scope: shipped CodexKit skills: ${skills.length}`);
   for (const group of grouped) {
     console.log(`\n${group.category}`);
     for (const skill of group.skills) {
@@ -377,8 +377,8 @@ export async function runCli(argv) {
   const version = await getPackageVersion();
   const templateRoot = path.resolve(__dirname, "../templates/project");
   const skillsRoot = path.resolve(templateRoot, ".agents/skills");
-  const pluginRoot = path.resolve(__dirname, "../plugins/codex-kit");
-  const localInstallCommand = "codex-kit install --target skills --scope local --skills";
+  const pluginRoot = path.resolve(__dirname, "../plugins/codexkit");
+  const localInstallCommand = "codexkit install --target skills --scope local --skills";
 
   await mkdir(operation.path, { recursive: true });
 
@@ -396,7 +396,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} file writes in ${operation.path}`
-          : `Project scope: installed Codex Kit scaffold into ${operation.path}`
+          : `Project scope: installed CodexKit scaffold into ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} existing files`);
@@ -404,8 +404,8 @@ export async function runCli(argv) {
       if (result.pluginInstalled) {
         console.log(
           operation.dryRun
-            ? "Project scope: planned Codex Kit workspace plugin install"
-            : "Project scope: installed Codex Kit workspace plugin"
+            ? "Project scope: planned CodexKit workspace plugin install"
+            : "Project scope: installed CodexKit workspace plugin"
         );
       }
     }
@@ -426,7 +426,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} file updates in ${operation.path}`
-          : `Project scope: synced Codex Kit scaffold in ${operation.path}`
+          : `Project scope: synced CodexKit scaffold in ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} locally modified files`);
@@ -434,8 +434,8 @@ export async function runCli(argv) {
       if (result.pluginInstalled) {
         console.log(
           operation.dryRun
-            ? "Project scope: planned Codex Kit workspace plugin sync"
-            : "Project scope: synced Codex Kit workspace plugin"
+            ? "Project scope: planned CodexKit workspace plugin sync"
+            : "Project scope: synced CodexKit workspace plugin"
         );
       }
     }
@@ -454,7 +454,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} workspace plugin file writes in ${operation.path}`
-          : `Project scope: installed Codex Kit workspace plugin into ${operation.path}`
+          : `Project scope: installed CodexKit workspace plugin into ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} existing plugin files`);
@@ -474,7 +474,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `${operation.scope === "local" ? "Local" : "Project"} scope: planned MCP config update in ${result.configPath}`
-          : `${operation.scope === "local" ? "Local" : "Project"} scope: installed Codex Kit MCP bundle into ${result.configPath}`
+          : `${operation.scope === "local" ? "Local" : "Project"} scope: installed CodexKit MCP bundle into ${result.configPath}`
       );
     }
     return;
@@ -492,7 +492,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} workspace plugin file syncs in ${operation.path}`
-          : `Project scope: synced Codex Kit workspace plugin in ${operation.path}`
+          : `Project scope: synced CodexKit workspace plugin in ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} locally modified plugin files`);
@@ -512,7 +512,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `${operation.scope === "local" ? "Local" : "Project"} scope: planned MCP config sync in ${result.configPath}`
-          : `${operation.scope === "local" ? "Local" : "Project"} scope: synced Codex Kit MCP bundle in ${result.configPath}`
+          : `${operation.scope === "local" ? "Local" : "Project"} scope: synced CodexKit MCP bundle in ${result.configPath}`
       );
     }
     return;
@@ -595,7 +595,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} project skill file writes in ${operation.path}`
-          : `Project scope: installed Codex Kit project skills into ${operation.path}`
+          : `Project scope: installed CodexKit project skills into ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} existing project skill files`);
@@ -611,9 +611,9 @@ export async function runCli(argv) {
     });
     const grouped = groupSkillsByCategory(result.installed);
 
-    console.log(`Local scope: installed Codex Kit skills in ${result.targetRoot}: ${result.installed.length}`);
+    console.log(`Local scope: installed CodexKit skills in ${result.targetRoot}: ${result.installed.length}`);
     if (result.installed.length === 0) {
-      console.log("Local scope: no shipped Codex Kit skills are currently installed.");
+      console.log("Local scope: no shipped CodexKit skills are currently installed.");
       return;
     }
 
@@ -626,7 +626,7 @@ export async function runCli(argv) {
 
     if (result.missing.length > 0) {
       console.log(`\nLocal scope: missing shipped skills: ${result.missing.length}`);
-      console.log("  Run `codex-kit install --target skills --scope local` to install the full shipped catalog.");
+      console.log("  Run `codexkit install --target skills --scope local` to install the full shipped catalog.");
     }
     return;
   }
@@ -643,7 +643,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Project scope: planned ${result.written.length} project skill file syncs in ${operation.path}`
-          : `Project scope: synced Codex Kit project skills in ${operation.path}`
+          : `Project scope: synced CodexKit project skills in ${operation.path}`
       );
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} locally modified project skill files`);
@@ -664,7 +664,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Local scope: planned ${result.written.length} skill file writes in ${result.targetDir}`
-          : `Local scope: installed Codex Kit skills into ${result.targetDir}`
+          : `Local scope: installed CodexKit skills into ${result.targetDir}`
       );
       if (result.skipped.length > 0) {
         console.log(`Local scope: skipped ${result.skipped.length} existing skill files`);
@@ -684,7 +684,7 @@ export async function runCli(argv) {
       console.log(
         operation.dryRun
           ? `Local scope: planned ${result.written.length} skill file syncs in ${result.targetDir}`
-          : `Local scope: synced Codex Kit skills into ${result.targetDir}`
+          : `Local scope: synced CodexKit skills into ${result.targetDir}`
       );
     }
     return;
@@ -746,9 +746,9 @@ export async function runCli(argv) {
       );
       console.log("\nNext steps:");
       console.log(`  1. Open Codex in ${operation.path}`);
-      console.log("  2. Open Plugins and choose `Codex Kit Local`.");
-      console.log("  3. Click `+` on `Codex Kit` to install the workspace plugin.");
-      console.log("  4. Start a new thread and use `@Codex Kit` or any installed local skills.");
+      console.log("  2. Open Plugins and choose `CodexKit Local`.");
+      console.log("  3. Click `+` on `CodexKit` to install the workspace plugin.");
+      console.log("  4. Start a new thread and use `@CodexKit` or any installed local skills.");
     }
     return;
   }

@@ -1,6 +1,6 @@
 # Codex Agent Flow
 
-This document explains how a user request should move through the Codex Kit structure from intake to result delivery.
+This document explains how a user request should move through the CodexKit structure from intake to result delivery.
 
 ## High-Level Flow
 
@@ -36,12 +36,13 @@ Once the primary mode is clear, route to the narrowest workflow:
 | --- | --- |
 | vague feature or strategy request | `brainstorm.md` |
 | user asks for an implementation plan | `plan.md` |
+| PRD or business logic to screen architecture | `screen-spec.md` |
+| UI or UX design direction work | `impeccable.md` |
+| implement an existing Figma design in code | `figma-to-code.md` |
 | new feature or structured code work | `create.md` |
 | iterative change to an existing feature | `enhance.md` |
 | bug or regression investigation | `debug.md` |
 | review or audit request | `review.md` |
-| UI or UX design direction work | `ui-ux-pro-max.md` |
-| implement an existing Figma design in code | `figma-to-code.md` |
 | test creation or test execution | `test.md` |
 | local preview management | `preview.md` |
 | project or task status request | `status.md` |
@@ -139,7 +140,7 @@ The goal is not just to finish execution, but to leave the repository in a state
 
 ---
 
-## 🔗 Quick Reference Links
+## Quick Reference Links
 
 - **Architecture**: `ARCHITECTURE.md`
 - **Agents**: `.codex/agents/`

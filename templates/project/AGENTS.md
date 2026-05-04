@@ -28,7 +28,8 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 - Use `.agents/workflows/create.md` for new features or structured code generation.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
-- Use `.agents/workflows/ui-ux-pro-max.md` when the primary task is UI direction, redesign, or UX shaping.
+- Use `.agents/workflows/screen-spec.md` first when PRD/business logic needs to become screen inventory, screen flow, and UI states.
+- Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.
 - Use `.agents/workflows/figma-to-code.md` when the task is to implement an existing Figma frame or flow into the current codebase.
 - Prefer the `implementer` subagent for scoped code changes after the task is clear.
 - Use `frontend_specialist`, `backend_specialist`, `database_architect`, or `mobile_developer` when domain-specific implementation work is clearly separated.
@@ -115,9 +116,7 @@ Scripts are optional helpers. They must be suggested explicitly and only run aft
 
 Projects may also include shared tool packages under `.agents/.shared/` when multiple workflows need the same scripts or datasets.
 
-Example:
-
-- `.agents/.shared/ui-ux-pro-max/` for design-system search, style lookup, and stack-aware UI guidance
+Impeccable is shipped as a project skill at `.agents/skills/impeccable/`. It provides the primary UI/UX design workflow, design references, and optional helper scripts. Attribution and Apache 2.0 license notes are included in `.agents/skills/impeccable/NOTICE.md`.
 
 ## MCP
 

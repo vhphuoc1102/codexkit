@@ -1,14 +1,14 @@
 {
-  "name": "codex-kit-local",
+  "name": "codexkit-local",
   "interface": {
-    "displayName": "Codex Kit Local"
+    "displayName": "CodexKit Local"
   },
   "plugins": [
     {
-      "name": "codex-kit",
+      "name": "codexkit",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-kit"
+        "path": "./plugins/codexkit"
       },
       "policy": {
         "installation": "AVAILABLE",

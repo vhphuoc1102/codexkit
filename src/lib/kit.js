@@ -9,8 +9,8 @@ import {
 } from "./skills.js";
 import { loadTemplateFiles } from "./templates.js";
 
-const PLUGIN_NAME = "codex-kit";
-const PLUGIN_TARGET_ROOT = ".agents/plugins/codex-kit";
+const PLUGIN_NAME = "codexkit";
+const PLUGIN_TARGET_ROOT = ".agents/plugins/codexkit";
 const MARKETPLACE_PATH = ".agents/plugins/marketplace.json";
 const LOCAL_SKILLS_TARGET_ROOT = "skills";
 const PROJECT_SKILLS_TARGET_ROOT = ".agents/skills";
@@ -391,7 +391,7 @@ export async function updateProject({
 }) {
   const existingManifest = await readManifest(targetDir);
   if (!existingManifest) {
-    throw new Error("No Codex Kit manifest found. Run `codex-kit init` first.");
+    throw new Error("No CodexKit manifest found. Run `codexkit init` first.");
   }
 
   const manifestByPath = new Map(existingManifest.files.map((file) => [file.path, file]));

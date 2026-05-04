@@ -1,7 +1,7 @@
 import path from "node:path";
 import { pathExists, readText, writeText } from "./fs.js";
 
-export const MANIFEST_PATH = ".codex-kit/manifest.json";
+export const MANIFEST_PATH = ".codexkit/manifest.json";
 
 export async function readManifest(targetDir) {
   const manifestPath = path.join(targetDir, MANIFEST_PATH);

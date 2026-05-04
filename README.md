@@ -1,33 +1,33 @@
-# Codex Kit
+# CodexKit
 
-[![npm version](https://img.shields.io/npm/v/@daominhhiep/codex-kit.svg)](https://www.npmjs.com/package/@daominhhiep/codex-kit)
+[![npm version](https://img.shields.io/npm/v/@vhphuoc1102/codexkit.svg)](https://www.npmjs.com/package/@vhphuoc1102/codexkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > Codex-native starter kit with scaffolded docs, skills, workflows, agents, plugin support, and local skill management.
 
-**[Official Website](https://codexkit.xyz/)** | **[Web Docs](https://codexkit.xyz/#/docs/introduction)** | **[Unikorn](https://unikorn.vn/p/codex-kit)**
+**[Official Website](https://codexkit.xyz/)** | **[Web Docs](https://codexkit.xyz/#/docs/introduction)** | **[Unikorn](https://unikorn.vn/p/codexkit)**
 
-Codex Kit helps you bootstrap a repository that already knows how to work with Codex.
+CodexKit helps you bootstrap a repository that already knows how to work with Codex.
 
 Instead of rebuilding the same operating layer in every project, you get a ready-to-use scaffold with routing docs, a shipped skill catalog, workflow playbooks, focused subagents, Codex config, and update/status commands.
 
 ## Quick Install
 
 ```bash
-npx @daominhhiep/codex-kit init
+npx @vhphuoc1102/codexkit init
 ```
 
 Or install globally:
 
 ```bash
-npm install -g @daominhhiep/codex-kit
-codex-kit init
+npm install -g @vhphuoc1102/codexkit
+codexkit init
 ```
 
 Initialize into a specific directory:
 
 ```bash
-npx @daominhhiep/codex-kit init --path ./my-project
+npx @vhphuoc1102/codexkit init --path ./my-project
 ```
 
 ## What You Get
@@ -39,77 +39,77 @@ npx @daominhhiep/codex-kit init --path ./my-project
 - shared UI/UX data and scripts in `.agents/.shared`
 - project-scoped Codex config in `.codex/config.toml`
 - optional Codex execution rules in `codex/rules/default.rules`
-- managed-file tracking in `.codex-kit/manifest.json`
+- managed-file tracking in `.codexkit/manifest.json`
 
 ## CLI
 
 Primary commands:
 
 ```bash
-codex-kit init
-codex-kit install
-codex-kit install --target plugin
-codex-kit install --target mcp
-codex-kit install --target skills
-codex-kit install --target skills --scope local
-codex-kit update
-codex-kit sync --target mcp
-codex-kit sync --target plugin
-codex-kit sync --target skills
-codex-kit sync --target skills --scope local
-codex-kit list --target skills
-codex-kit list --target skills --query frontend
-codex-kit list --target skills --scope local
-codex-kit list --target plugin
-codex-kit list --target mcp
-codex-kit remove --target skills --scope local --skills clean-code,planning
-codex-kit setup-codex
-codex-kit sync-codex
-codex-kit status
+codexkit init
+codexkit install
+codexkit install --target plugin
+codexkit install --target mcp
+codexkit install --target skills
+codexkit install --target skills --scope local
+codexkit update
+codexkit sync --target mcp
+codexkit sync --target plugin
+codexkit sync --target skills
+codexkit sync --target skills --scope local
+codexkit list --target skills
+codexkit list --target skills --query frontend
+codexkit list --target skills --scope local
+codexkit list --target plugin
+codexkit list --target mcp
+codexkit remove --target skills --scope local --skills clean-code,planning
+codexkit setup-codex
+codexkit sync-codex
+codexkit status
 ```
 
 Common examples:
 
 ```bash
-codex-kit init --path ./my-project
-codex-kit install --path ./my-project
-codex-kit install --target plugin
-codex-kit install --target mcp
-codex-kit install --target skills
+codexkit init --path ./my-project
+codexkit install --path ./my-project
+codexkit install --target plugin
+codexkit install --target mcp
+codexkit install --target skills
 
-codex-kit list --target skills
-codex-kit list --target skills --query frontend
-codex-kit list --target skills --scope local
-codex-kit list --target mcp
+codexkit list --target skills
+codexkit list --target skills --query frontend
+codexkit list --target skills --scope local
+codexkit list --target mcp
 
-codex-kit install --target skills --scope local
-codex-kit install --target skills --scope local --skills clean-code,planning
-codex-kit sync --target skills --scope local --skills clean-code,planning
-codex-kit remove --target skills --scope local --skills clean-code,planning
+codexkit install --target skills --scope local
+codexkit install --target skills --scope local --skills clean-code,planning
+codexkit sync --target skills --scope local --skills clean-code,planning
+codexkit remove --target skills --scope local --skills clean-code,planning
 
-codex-kit setup-codex
-codex-kit sync-codex
+codexkit setup-codex
+codexkit sync-codex
 ```
 
 Legacy aliases still work:
 
 ```bash
-codex-kit install --target project
-codex-kit sync --target project
-codex-kit list-skills
-codex-kit search-skills frontend
-codex-kit list-installed-skills
-codex-kit install-skills
-codex-kit sync-skills
-codex-kit remove-skills --skills clean-code,planning
+codexkit install --target project
+codexkit sync --target project
+codexkit list-skills
+codexkit search-skills frontend
+codexkit list-installed-skills
+codexkit install-skills
+codexkit sync-skills
+codexkit remove-skills --skills clean-code,planning
 ```
 
 ## Codex Integration
 
-Codex Kit ships with a local Codex plugin scaffold:
+CodexKit ships with a local Codex plugin scaffold:
 
-- plugin manifest: `plugins/codex-kit/.codex-plugin/plugin.json`
-- plugin skill: `plugins/codex-kit/skills/codex-kit/SKILL.md`
+- plugin manifest: `plugins/codexkit/.codex-plugin/plugin.json`
+- plugin skill: `plugins/codexkit/skills/codexkit/SKILL.md`
 - local marketplace support via `.agents/plugins/marketplace.json`
 
 There are two different installation scopes:
@@ -122,27 +122,27 @@ There are two different installation scopes:
 To scaffold a project:
 
 ```bash
-npx @daominhhiep/codex-kit init
-npx @daominhhiep/codex-kit install
+npx @vhphuoc1102/codexkit init
+npx @vhphuoc1102/codexkit install
 ```
 
 To install only the workspace plugin into the current project:
 
 ```bash
-npx @daominhhiep/codex-kit install --target plugin
+npx @vhphuoc1102/codexkit install --target plugin
 ```
 
 To install only the shipped project skills into the current project:
 
 ```bash
-npx @daominhhiep/codex-kit install --target skills
+npx @vhphuoc1102/codexkit install --target skills
 ```
 
 To install the shipped MCP bundle into the project or local Codex config:
 
 ```bash
-npx @daominhhiep/codex-kit install --target mcp
-npx @daominhhiep/codex-kit install --target mcp --scope local
+npx @vhphuoc1102/codexkit install --target mcp
+npx @vhphuoc1102/codexkit install --target mcp --scope local
 ```
 
 The shipped MCP bundle currently includes:
@@ -153,19 +153,19 @@ The shipped MCP bundle currently includes:
 To do the full local setup in one go for the current repository:
 
 ```bash
-npx @daominhhiep/codex-kit setup-codex
+npx @vhphuoc1102/codexkit setup-codex
 ```
 
-After upgrading Codex Kit, sync both the workspace plugin and local shipped skills:
+After upgrading CodexKit, sync both the workspace plugin and local shipped skills:
 
 ```bash
-npx @daominhhiep/codex-kit sync-codex
+npx @vhphuoc1102/codexkit sync-codex
 ```
 
 To install the shipped skills into local Codex:
 
 ```bash
-npx @daominhhiep/codex-kit install --target skills --scope local
+npx @vhphuoc1102/codexkit install --target skills --scope local
 ```
 
 By default, local skills are installed into:
@@ -177,22 +177,22 @@ ${CODEX_HOME:-~/.codex}/skills
 To browse or search the shipped catalog:
 
 ```bash
-npx @daominhhiep/codex-kit list --target skills
-npx @daominhhiep/codex-kit list --target skills --query frontend
-npx @daominhhiep/codex-kit list --target skills --scope local
+npx @vhphuoc1102/codexkit list --target skills
+npx @vhphuoc1102/codexkit list --target skills --query frontend
+npx @vhphuoc1102/codexkit list --target skills --scope local
 ```
 
-The bundled plugin can also help map natural requests such as "cài skill frontend" or "liệt kê skills debug" to the right Codex Kit commands.
+The bundled plugin can also help map natural requests such as "cài skill frontend" or "liệt kê skills debug" to the right CodexKit commands.
 
 ## Codex Rules
 
-Codex Kit now ships a minimal execution policy template at `codex/rules/default.rules`.
+CodexKit now ships a minimal execution policy template at `codex/rules/default.rules`.
 
 It is intentionally narrow:
 
 - prompts before dependency installs such as `npm install` or `pnpm install`
 - prompts before `git push`
-- prompts before Codex Kit writes into local Codex with `--scope local`
+- prompts before CodexKit writes into local Codex with `--scope local`
 
 It does not replace `AGENTS.md`, skills, or workflows. Those files still handle behavior and routing; `codex/rules/default.rules` is only for sandbox approval policy.
 

@@ -1,0 +1,41 @@
+{
+  "name": "codexkit",
+  "version": "0.1.4",
+  "description": "CodexKit plugin for scaffolding repositories, using local CodexKit workflows, discovering shipped skills, and setting up local Codex.",
+  "author": {
+    "name": "vhphuoc1102",
+    "url": "https://github.com/vhphuoc1102"
+  },
+  "homepage": "https://github.com/vhphuoc1102/codexkit/tree/main/plugins/codexkit#readme",
+  "repository": "https://github.com/vhphuoc1102/codexkit/tree/main/plugins/codexkit",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "cli",
+    "starter",
+    "workflow",
+    "skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "CodexKit",
+    "shortDescription": "Scaffold repos, use workflows, and set up Codex.",
+    "longDescription": "Provides Codex-native setup flows for project scaffolding, local workflow routing inside scaffolded repositories, workspace plugin installation, local skill management, and shipped skill discovery.",
+    "developerName": "vhphuoc1102",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Shell"
+    ],
+    "websiteURL": "https://github.com/vhphuoc1102/codexkit",
+    "privacyPolicyURL": "https://github.com/vhphuoc1102/codexkit",
+    "termsOfServiceURL": "https://github.com/vhphuoc1102/codexkit",
+    "defaultPrompt": [
+      "Use CodexKit to set up this repository for Codex and install the workspace plugin.",
+      "Use CodexKit to list, search, install, or sync the shipped CodexKit skills.",
+      "If this repository already has CodexKit workflows, follow the local workflow files in .agents/workflows before falling back to scaffold commands."
+    ],
+    "brandColor": "#10A37F"
+  }
+}

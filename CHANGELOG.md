@@ -4,12 +4,12 @@ All notable changes to this project are documented here.
 
 ## [v0.1.4] - 2026-04-02
 
-Release: [v0.1.4](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.4)
+Release: [v0.1.4](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.4)
 
 ### Added
 
 - Implemented dynamic SEO management for docs with `robots.txt`, `sitemap.xml`, and JSON-LD support.
-- Added MCP server support (`src/lib/mcp.js`) exposed via Codex Kit.
+- Added MCP server support (`src/lib/mcp.js`) exposed via CodexKit.
 - Added support for OpenAI release-readiness agent workflow.
 - Added `status` CLI command to verify project workspace state.
 
@@ -20,7 +20,7 @@ Release: [v0.1.4](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.4)
 
 ## [v0.1.3] - 2026-04-01
 
-Release: [v0.1.3](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.3)
+Release: [v0.1.3](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.3)
 
 ### Added
 
@@ -28,13 +28,13 @@ Release: [v0.1.3](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.3)
 - Added `sync-codex` to resync the workspace plugin and local shipped skills after upgrading the package.
 - Added `list-skills` to show the shipped skill catalog by category, with quick install commands.
 - Added `search-skills <query>` to find skills by name, summary, or category.
-- Added `list-installed-skills` to show which Codex Kit skills are already installed in local Codex.
+- Added `list-installed-skills` to show which CodexKit skills are already installed in local Codex.
 - Added selective `--skills` support for install, sync, and remove flows.
 - Expanded the shipped skill catalog and local installation guidance.
 
 ### Improved
 
-- Updated the Codex Kit plugin skill so it can better route natural requests such as installing frontend skills, listing debug skills, or syncing plugin and skills.
+- Updated the CodexKit plugin skill so it can better route natural requests such as installing frontend skills, listing debug skills, or syncing plugin and skills.
 - Refreshed the plugin manifest copy to better describe repository scaffolding, Codex setup and sync, skill discovery, and local skill management.
 - Reworked the README and web docs to make installation scopes, workflow usage, CLI commands, agents, and skill categories easier to understand.
 - Added docs screenshots and image zoom support in the web docs for plugin installation and local skill installation flows.
@@ -46,12 +46,12 @@ Release: [v0.1.3](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.3)
 
 ## [v0.1.2] - 2026-04-01
 
-Release: [v0.1.2](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.2)
+Release: [v0.1.2](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.2)
 
 ### Added
 
 - Added CLI support for local skill management.
-- Added support for installing the Codex Kit plugin into a workspace.
+- Added support for installing the CodexKit plugin into a workspace.
 
 ### Improved
 
@@ -61,7 +61,7 @@ Release: [v0.1.2](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.2)
 
 ## [v0.1.1] - 2026-04-01
 
-Release: [v0.1.1](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.1)
+Release: [v0.1.1](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.1)
 
 ### Added
 
@@ -75,7 +75,7 @@ Release: [v0.1.1](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.1)
 
 ## [v0.1.1-alpha] - 2026-04-01
 
-Release: [v0.1.1-alpha](https://github.com/daominhhiep/codex-kit/releases/tag/v0.1.1-alpha)
+Release: [v0.1.1-alpha](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.1-alpha)
 
 ### Improved
 
