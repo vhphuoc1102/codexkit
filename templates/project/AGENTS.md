@@ -20,9 +20,15 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 - Use `.agents/workflows/brainstorm.md` for vague or strategic requests.
 - Use `.agents/workflows/plan.md` when the user wants a task breakdown before code changes.
+- Use `.agents/workflows/grill-with-docs.md` when the user says `grill`, `grill me`, asks to challenge an idea, or wants a plan/spec stress-tested against project context.
 - Prefer the `planner` subagent for decomposition, success criteria, and sequencing.
 - Prefer the `explorer` subagent when repository mapping or dependency tracing is the immediate need.
 - Load `repo-onboarding` when entering an unfamiliar repository and a fast, reliable codebase map is needed first.
+
+### Setup and Onboarding
+
+- Use `.agents/workflows/setup-agent-context.md` when the user asks to `setup`, `setup agent context`, `setup issue tracker`, or initialize local agent context for the repository.
+- Use this workflow to create or refresh local domain docs and local markdown issue-tracker guidance.
 
 ### Implementation
 

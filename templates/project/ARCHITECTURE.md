@@ -110,6 +110,8 @@ Workflows live in `.agents/workflows/*.md`.
 They define repeatable playbooks for common task types such as:
 
 - brainstorming
+- setup and onboarding
+- challenging and stress-testing plans
 - planning
 - creating
 - enhancing
