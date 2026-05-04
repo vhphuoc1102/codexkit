@@ -1,6 +1,5 @@
 # CodexKit
 
-[![npm version](https://img.shields.io/npm/v/@vhphuoc1102/codexkit.svg)](https://www.npmjs.com/package/@vhphuoc1102/codexkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > Codex-native starter kit with scaffolded docs, skills, workflows, agents, plugin support, and local skill management.
@@ -12,6 +11,15 @@ CodexKit helps you bootstrap a repository that already knows how to work with Co
 Instead of rebuilding the same operating layer in every project, you get a ready-to-use scaffold with routing docs, a shipped skill catalog, workflow playbooks, focused subagents, Codex config, and update/status commands.
 
 ## Quick Install
+
+CodexKit is published to GitHub Packages. Configure npm for the `@vhphuoc1102` scope first:
+
+```bash
+npm config set @vhphuoc1102:registry https://npm.pkg.github.com
+npm config set //npm.pkg.github.com/:_authToken YOUR_GITHUB_PAT
+```
+
+Use a GitHub personal access token with `read:packages` permission for installs.
 
 ```bash
 npx @vhphuoc1102/codexkit init
@@ -34,9 +42,9 @@ npx @vhphuoc1102/codexkit init --path ./my-project
 
 - root routing docs: `AGENTS.md`, `ARCHITECTURE.md`, `AGENT_FLOW.md`
 - 40+ shipped skills in `.agents/skills`
-- 16 workflow playbooks in `.agents/workflows`
+- 19 workflow playbooks in `.agents/workflows`
 - 16 focused subagents in `.codex/agents`
-- shared UI/UX data and scripts in `.agents/.shared`
+- Impeccable UI/UX skill and workflow for design work
 - project-scoped Codex config in `.codex/config.toml`
 - optional Codex execution rules in `codex/rules/default.rules`
 - managed-file tracking in `.codexkit/manifest.json`
@@ -102,6 +110,26 @@ codexkit list-installed-skills
 codexkit install-skills
 codexkit sync-skills
 codexkit remove-skills --skills clean-code,planning
+```
+
+## GitHub Packages
+
+The package is published to:
+
+```text
+https://npm.pkg.github.com
+```
+
+If a project should always use CodexKit from GitHub Packages, add this to the project's `.npmrc`:
+
+```text
+@vhphuoc1102:registry=https://npm.pkg.github.com
+```
+
+Local installs also need GitHub package authentication, either through npm config or an environment-backed `.npmrc` entry:
+
+```text
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
 ## Codex Integration

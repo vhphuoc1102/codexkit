@@ -1,8 +1,11 @@
 {
   "name": "@vhphuoc1102/codexkit",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "CodexKit with reusable skills, subagents, workflows, and a project scaffold CLI.",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "bin": {
     "codexkit": "./bin/codexkit.js"
   },
