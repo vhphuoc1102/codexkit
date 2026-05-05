@@ -425,9 +425,12 @@ export async function runCli(argv) {
     if (!operation.quiet) {
       console.log(
         operation.dryRun
-          ? `Project scope: planned ${result.written.length} file updates in ${operation.path}`
+          ? `Project scope: planned ${result.written.length} file updates and ${result.deleted.length} obsolete file removals in ${operation.path}`
           : `Project scope: synced CodexKit scaffold in ${operation.path}`
       );
+      if (!operation.dryRun && result.deleted.length > 0) {
+        console.log(`Project scope: removed ${result.deleted.length} obsolete managed files`);
+      }
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} locally modified files`);
       }
@@ -778,9 +781,12 @@ export async function runCli(argv) {
       );
       console.log(
         operation.dryRun
-          ? `Project scope: planned ${updateResult.written.length} workspace file updates`
+          ? `Project scope: planned ${updateResult.written.length} workspace file updates and ${updateResult.deleted.length} obsolete file removals`
           : "Project scope: scaffold and workspace plugin synced"
       );
+      if (!operation.dryRun && updateResult.deleted.length > 0) {
+        console.log(`Project scope: removed ${updateResult.deleted.length} obsolete managed files`);
+      }
       console.log(
         operation.dryRun
           ? `Local scope: planned ${skillsResult.written.length} skill file syncs in ${skillsResult.targetDir}`
@@ -806,6 +812,7 @@ export async function runCli(argv) {
     console.log(`Project scope: missing files ${result.missing.length}`);
     console.log(`Project scope: modified files ${result.modified.length}`);
     console.log(`Project scope: outdated files ${result.outdated.length}`);
+    console.log(`Project scope: obsolete files ${result.obsolete.length}`);
     if (result.missing.length > 0) {
       console.log("\nMissing:");
       for (const file of result.missing) {
@@ -821,6 +828,12 @@ export async function runCli(argv) {
     if (result.outdated.length > 0) {
       console.log("\nOutdated:");
       for (const file of result.outdated) {
+        console.log(`  - ${file}`);
+      }
+    }
+    if (result.obsolete.length > 0) {
+      console.log("\nObsolete:");
+      for (const file of result.obsolete) {
         console.log(`  - ${file}`);
       }
     }

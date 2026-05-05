@@ -401,8 +401,13 @@ export async function updateProject({
     pluginRoot,
     includePlugin
   });
+  const templateByPath = new Map(
+    templates.map((template) => [normalizePath(template.relativePath), template])
+  );
   const written = [];
   const skipped = [];
+  const deleted = [];
+  const obsolete = [];
   const nextManifestFiles = [];
 
   for (const template of templates) {
@@ -438,6 +443,35 @@ export async function updateProject({
     });
   }
 
+  for (const previous of existingManifest.files) {
+    if (templateByPath.has(previous.path)) {
+      continue;
+    }
+
+    const destination = path.join(targetDir, previous.path);
+    const currentHash = await getCurrentHash(destination);
+    if (currentHash === null) {
+      obsolete.push(previous.path);
+      continue;
+    }
+
+    const isLocallyModified =
+      previous.installedHash &&
+      currentHash !== previous.installedHash;
+
+    if (isLocallyModified && !force) {
+      skipped.push(previous.path);
+      nextManifestFiles.push(previous);
+      continue;
+    }
+
+    if (!dryRun) {
+      await removePath(destination);
+    }
+    deleted.push(previous.path);
+    obsolete.push(previous.path);
+  }
+
   if (!dryRun) {
     await writeManifest(
       targetDir,
@@ -449,7 +483,7 @@ export async function updateProject({
     await ensurePluginMarketplace({ targetDir, dryRun });
   }
 
-  return { written, skipped, pluginInstalled: includePlugin };
+  return { written, skipped, deleted, obsolete, pluginInstalled: includePlugin };
 }
 
 export async function syncWorkspacePlugin({
@@ -543,18 +577,24 @@ export async function statusProject({ targetDir, templateRoot, pluginRoot, versi
       pluginInstalled: false,
       missing: templates.map((template) => normalizePath(template.relativePath)),
       modified: [],
-      outdated: []
+      outdated: [],
+      obsolete: []
     };
   }
 
   const missing = [];
   const modified = [];
   const outdated = [];
+  const obsolete = [];
+  const manifestByPath = new Map(manifest.files.map((file) => [file.path, file]));
 
   for (const file of manifest.files) {
     const destination = path.join(targetDir, file.path);
     const currentHash = await getCurrentHash(destination);
     const template = templateByPath.get(file.path);
+    if (!template) {
+      obsolete.push(file.path);
+    }
     if (currentHash === null) {
       missing.push(file.path);
       continue;
@@ -567,13 +607,29 @@ export async function statusProject({ targetDir, templateRoot, pluginRoot, versi
     }
   }
 
+  for (const template of templates) {
+    const relativePath = normalizePath(template.relativePath);
+    if (manifestByPath.has(relativePath)) {
+      continue;
+    }
+
+    const destination = path.join(targetDir, template.relativePath);
+    const currentHash = await getCurrentHash(destination);
+    if (currentHash === null) {
+      missing.push(relativePath);
+    } else if (currentHash !== template.templateHash) {
+      modified.push(relativePath);
+    }
+  }
+
   return {
     version: manifest.version || version,
     managedCount: manifest.files.length,
     pluginInstalled: hasPluginFeature(manifest),
     missing,
     modified,
-    outdated
+    outdated,
+    obsolete
   };
 }
 
