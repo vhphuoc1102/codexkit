@@ -37,11 +37,12 @@ Once the primary mode is clear, route to the narrowest workflow:
 | initial repository agent setup, local issue tracker, or domain docs | `setup-agent-context.md` |
 | vague feature or strategy request | `brainstorm.md` |
 | challenge, grill, or stress-test an idea/plan/spec | `grill-with-docs.md` |
-| user asks for an implementation plan | `plan.md` |
+| user asks for an implementation plan, PRD, or bead breakdown | `plan.md` |
+| user asks for TDD or test-first prep for a bead | `tdd.md` |
 | PRD or business logic to screen architecture | `screen-spec.md` |
 | UI or UX design direction work | `impeccable.md` |
 | implement an existing Figma design in code | `figma-to-code.md` |
-| new feature or structured code work | `create.md` |
+| new feature, structured code work, or bead execution | `execute.md` |
 | iterative change to an existing feature | `enhance.md` |
 | bug or regression investigation | `debug.md` |
 | review or audit request | `review.md` |
@@ -51,7 +52,7 @@ Once the primary mode is clear, route to the narrowest workflow:
 | quick validation | `check.md` |
 | deeper release validation | `verify.md` |
 | deployment preparation or execution | `deploy.md` |
-| multi-subagent coordination | `orchestrate.md` |
+| multi-subagent coordination or bead swarm | `swarm.md` |
 | release or handoff summary | `ship.md` |
 
 The workflow gives the process skeleton for the task.
@@ -72,7 +73,7 @@ Examples:
 - `tailwind-patterns` for Tailwind-first implementation details
 - `nextjs-react-expert` for React or Next.js UI performance concerns
 - `api-patterns` or `database-design` for server-side structure changes
-- `test-hardening`, `testing-patterns`, or `tdd-workflow` for focused validation
+- `test-hardening`, `testing-patterns`, or `tdd-workflow` for focused validation and TDD specs
 - `high-signal-review` or `code-review` for review passes
 - `docs-shipper`, `documentation-templates`, or `mcp-builder` for docs or protocol-heavy work
 - `mcp-onboarding` for MCP evaluation and rollout decisions
@@ -107,6 +108,8 @@ During execution:
 
 If a skill includes helper scripts, they are optional and should be proposed, not silently executed.
 If a skill includes `verify.md`, `handoff.md`, or a checklist file, use it as the output contract for that task shape.
+
+For Beads-based work, prefer `plan -> tdd -> execute`, or `plan -> swarm` when multiple ready beads can run safely. `plan.md` publishes executable work as Beads, `tdd.md` prepares test-first specs, `execute.md` implements one bead or one small direct prompt, and `swarm.md` coordinates multiple agents with reservations.
 
 ## 6. Validation Layer
 

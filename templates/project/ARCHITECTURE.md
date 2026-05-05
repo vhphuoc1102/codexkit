@@ -4,16 +4,15 @@ This document describes the project-level structure installed by CodexKit and ho
 
 ## Overview
 
-The scaffold is built around four layers:
+The scaffold is built around five layers:
 
 - `AGENTS.md` as the routing and operating contract
 - `.agents/skills/` for reusable capability modules
 - `.agents/workflows/` for task playbooks
 - `.codex/agents/` for focused subagents
+- `.codexkit/` for lightweight Beads execution state, file reservations, and handoff files
 
-Some projects may also include `.agents/.shared/` for reusable script-and-data packages that support multiple workflows.
-
-The goal is to keep the system small, composable, and explicit. Skills provide knowledge, workflows provide process, and subagents provide bounded execution roles.
+Skills provide knowledge, workflows provide process, subagents provide bounded execution roles, and `.codexkit/` stores local coordination state.
 
 ## Directory Structure
 
@@ -24,174 +23,105 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 ├── AGENT_FLOW.md
 ├── .agents/
 │   ├── skills/
-│   │   ├── clean-code/
-│   │   ├── code-review/
-│   │   ├── debugging/
-│   │   ├── frontend-design/
-│   │   ├── api-patterns/
-│   │   ├── database-design/
-│   │   ├── impeccable/
-│   │   ├── planning/
-│   │   ├── release-readiness/
-│   │   └── testing-patterns/
 │   ├── .shared/
 │   └── workflows/
 │       ├── brainstorm.md
 │       ├── check.md
-│       ├── create.md
 │       ├── debug.md
 │       ├── deploy.md
 │       ├── enhance.md
-│       ├── orchestrate.md
+│       ├── execute.md
+│       ├── figma-to-code.md
+│       ├── grill-with-docs.md
+│       ├── impeccable.md
 │       ├── plan.md
 │       ├── preview.md
 │       ├── review.md
-│       ├── impeccable.md
 │       ├── screen-spec.md
+│       ├── setup-agent-context.md
 │       ├── ship.md
 │       ├── status.md
+│       ├── swarm.md
 │       ├── test.md
+│       ├── tdd.md
 │       └── verify.md
 ├── .codex/
 │   ├── config.toml
 │   └── agents/
-│       ├── backend-specialist.toml
-│       ├── database-architect.toml
-│       ├── debugger.toml
-│       ├── devops-engineer.toml
-│       ├── docs-researcher.toml
-│       ├── documentation-writer.toml
-│       ├── explorer.toml
-│       ├── frontend-specialist.toml
-│       ├── implementer.toml
-│       ├── mobile-developer.toml
-│       ├── performance-optimizer.toml
-│       ├── planner.toml
-│       ├── reviewer.toml
-│       ├── security-auditor.toml
-│       ├── seo-specialist.toml
-│       └── test-writer.toml
 └── .codexkit/
-    └── manifest.json
+    ├── manifest.json
+    ├── state.json
+    ├── reservations.json
+    ├── HANDOFF.json
+    └── scripts/
 ```
 
 ## Responsibilities
 
 ### AGENTS.md
 
-`AGENTS.md` is the main control document. It defines:
-
-- request classification
-- routing from task type to workflow
-- routing from workflow to subagent or skill
-- validation expectations
-- approval boundaries for risky execution
-
-This is the first file Codex should consult when deciding how to approach work in the repository.
+`AGENTS.md` is the main control document. It defines request classification, workflow routing, subagent routing, validation expectations, and approval boundaries for risky execution.
 
 ### Skills
 
 Skills live in `.agents/skills/<name>/SKILL.md`.
 
-Each skill should stay narrow and reusable. A skill may optionally include:
+Each skill should stay narrow and reusable. A skill may include `agents/openai.yaml`, task-specific companion files such as `verify.md`, `references/`, `scripts/`, and assets. Skills are knowledge modules; they should not act like hidden automation.
 
-- `agents/openai.yaml` for invocation policy and explicit agent behavior
-- task-specific companion files such as `verify.md`, `handoff.md`, and rollout checklists
-- `references/` for templates, examples, or detailed guidance
-- `scripts/` for optional helpers
-- `assets/` for support files
-
-Skills are knowledge modules. They should not act like hidden automation.
+Impeccable is intentionally shipped as a skill at `.agents/skills/impeccable/`, not as a shared package. Its upstream attribution and Apache 2.0 license notes live in `.agents/skills/impeccable/NOTICE.md`.
 
 ### Workflows
 
 Workflows live in `.agents/workflows/*.md`.
 
-They define repeatable playbooks for common task types such as:
+The Beads execution path is:
 
-- brainstorming
-- setup and onboarding
-- challenging and stress-testing plans
-- planning
-- creating
-- enhancing
-- debugging
-- reviewing
-- testing
-- UI and UX design
-- checking
-- verifying
-- deploying
-- previewing
-- status reporting
-- orchestrating
-- shipping
+```text
+plan -> tdd -> execute
+              \-> swarm
+```
 
-Workflows should encode process, not domain knowledge.
+- `plan.md` creates the PRD and Beads issue graph.
+- `tdd.md` prepares test-first specs for a bead.
+- `execute.md` implements one bead or a small direct task.
+- `swarm.md` coordinates multiple ready beads or generic sidecar subagents.
 
-### Shared Packages
+Other workflows cover brainstorming, setup, debugging, review, validation, preview, deployment, UI/UX work, and release handoff.
 
-Shared packages live in `.agents/.shared/`.
+### CodexKit State
 
-Use them when a workflow needs executable tooling or structured datasets that do not naturally belong to a single skill.
+Lightweight execution state lives in `.codexkit/`.
 
-Impeccable is intentionally shipped as a skill at `.agents/skills/impeccable/`, not as a shared package, because it owns a full instruction contract, references, and helper scripts for UI/UX work. Its upstream attribution and Apache 2.0 license notes live in `.agents/skills/impeccable/NOTICE.md`.
+- `state.json` tracks the active workflow, beads, workers, and simple approvals.
+- `reservations.json` tracks local file/path reservations so subagents do not edit overlapping scopes.
+- `HANDOFF.json` records pause/resume context for long `execute` or `swarm` sessions.
+- `scripts/` contains the state/status/reservation helpers used by workflows.
+
+This state layer intentionally does not port Khuym's full onboarding or phase-gate methodology.
 
 ### Subagents
 
 Subagents live in `.codex/agents/*.toml`.
 
-Each subagent should own a bounded role:
-
-- `planner` for decomposition and sequencing
-- `explorer` for repository mapping and codebase discovery
-- `implementer` for small focused code changes
-- `frontend_specialist` for UI and interaction work
-- `backend_specialist` for server-side implementation
-- `database_architect` for schema and migration design
-- `mobile_developer` for mobile-specific work
-- `debugger` for evidence gathering and root-cause isolation
-- `performance_optimizer` for measured performance improvements
-- `reviewer` for correctness and regression review
-- `security_auditor` for threat-focused review
-- `docs_researcher` for external API verification
-- `documentation_writer` for technical guides and handoff docs
-- `seo_specialist` for discoverability and content structure
-- `devops_engineer` for CI, deploy, and operational changes
-- `test_writer` for focused test additions
-
-Subagents should be specialized enough that routing is predictable.
+Each subagent should own a bounded role such as `planner`, `explorer`, `implementer`, `debugger`, `reviewer`, `docs_researcher`, `test_writer`, or a domain-specific specialist. Subagents should be specialized enough that routing is predictable.
 
 ### MCP Configuration
 
 Project-scoped MCP server definitions live in `.codex/config.toml` under `[mcp_servers]`.
 
-Use this layer for external tool servers and remote context providers. Keep checked-in defaults conservative: include examples and disabled templates, but avoid baking in environment-specific secrets or required third-party services unless the project truly depends on them.
-
-The default scaffold includes a ready-to-use Context7 MCP entry and commented examples for additional servers.
+Use this layer for external tool servers and remote context providers. Keep checked-in defaults conservative: include examples and disabled templates, but avoid environment-specific secrets.
 
 ### Manifest
 
-`.codexkit/manifest.json` tracks kit-managed files. It enables:
-
-- `status` to report missing, modified, and outdated managed files
-- `update` to refresh only safe targets
-- preservation of local customizations unless overwrite is explicitly requested
+`.codexkit/manifest.json` tracks kit-managed files. It enables `status` to report missing, modified, and outdated managed files, and `update` to refresh safe targets while preserving local customizations unless overwrite is explicitly requested.
 
 ## Design Principles
 
-- Keep responsibilities separate: knowledge, process, and execution should not be mixed together casually.
-- Prefer a small core that teams can extend, instead of a large catalog with overlapping instructions.
+- Keep responsibilities separate: knowledge, process, execution, and coordination state should not be mixed casually.
+- Prefer a small core that teams can extend.
 - Make risky behavior explicit and approval-gated.
-- Optimize for maintainability of the kit itself, not just first-run convenience.
+- Use Beads for executable work graphs when available, but keep generic workflows usable without Beads.
 
 ## Extension Model
 
-Projects can extend the starter by:
-
-- adding new skills under `.agents/skills`
-- adding new workflows under `.agents/workflows`
-- adding new subagents under `.codex/agents`
-- updating `AGENTS.md` to route new request types cleanly
-
-The expected pattern is additive extension, not replacement of the core contract.
+Projects can extend the starter by adding skills, workflows, subagents, MCP servers, or `.codexkit/` helper scripts. The expected pattern is additive extension, not replacement of the core contract.

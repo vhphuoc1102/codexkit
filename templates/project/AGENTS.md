@@ -20,6 +20,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 - Use `.agents/workflows/brainstorm.md` for vague or strategic requests.
 - Use `.agents/workflows/plan.md` when the user wants a task breakdown before code changes.
+- Use `.agents/workflows/plan.md` to produce a PRD and publish executable work as Beads when the task is feature-sized.
 - Use `.agents/workflows/grill-with-docs.md` when the user says `grill`, `grill me`, asks to challenge an idea, or wants a plan/spec stress-tested against project context.
 - Prefer the `planner` subagent for decomposition, success criteria, and sequencing.
 - Prefer the `explorer` subagent when repository mapping or dependency tracing is the immediate need.
@@ -28,11 +29,15 @@ When delegating to a subagent, include the preferred skill set in the task hando
 ### Setup and Onboarding
 
 - Use `.agents/workflows/setup-agent-context.md` when the user asks to `setup`, `setup agent context`, `setup issue tracker`, or initialize local agent context for the repository.
-- Use this workflow to create or refresh local domain docs and local markdown issue-tracker guidance.
+- Use this workflow to create or refresh local domain docs, Beads issue-tracker guidance, and CodexKit state conventions.
 
 ### Implementation
 
-- Use `.agents/workflows/create.md` for new features or structured code generation.
+- Use `.agents/workflows/execute.md` for new features, structured code generation, or implementing a bead.
+- If a bead id is present, execute that bead.
+- If the request is a small direct task, execute directly.
+- If the request is broad, ambiguous, or feature-sized, route to `plan` first.
+- Use `.agents/workflows/tdd.md` when the user asks for TDD, test-first implementation, or a bead needs a TDD spec before code.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
 - Use `.agents/workflows/screen-spec.md` first when PRD/business logic needs to become screen inventory, screen flow, and UI states.
 - Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.
@@ -78,6 +83,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
 - Use `.agents/workflows/verify.md` for deeper release readiness checks.
 - Use `.agents/workflows/deploy.md` for deployment preparation or execution.
 - Use `.agents/workflows/ship.md` when preparing a merge, release, or deployment summary.
+- Use `.agents/workflows/swarm.md` when multiple Beads or sidecar subagent tasks can run safely in parallel.
 - Use `devops_engineer` for CI, environment, and deployment-specific work.
 - Load `test-hardening`, `docs-shipper`, `mcp-onboarding`, and `release-readiness` when the task affects rollout, migrations, verification depth, or deploy risk.
   Preferred pairings:

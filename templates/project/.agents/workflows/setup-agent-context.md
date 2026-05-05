@@ -1,12 +1,13 @@
 # Setup Agent Context
 
-Use this workflow when setting up a new repository for agent-aware work, or when the agent lacks context about local issue files and domain docs.
+Use this workflow when setting up a new repository for agent-aware work, Beads issue tracking, and local domain docs.
 
 ## Goal
 
-Create the per-repo configuration that downstream workflows assume:
+Create the per-repo configuration downstream workflows assume:
 
-- Local markdown issue conventions
+- Beads issue tracking conventions
+- CodexKit state/reservation conventions
 - Domain documentation layout
 
 ## Process
@@ -15,50 +16,44 @@ Create the per-repo configuration that downstream workflows assume:
 
 Read the current repo state:
 
-- `AGENTS.md` and `CLAUDE.md` at the repo root -- does either exist? Is there already an `## Agent skills` section in either?
+- `AGENTS.md` and `CLAUDE.md` at the repo root
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
-- `.scratch/` -- does a local markdown issue convention already exist?
+- `.beads/` and whether `br` / `bv` are available
+- `.codexkit/` and whether state/reservation scripts exist
 
-### 2. Present findings and ask
+### 2. Present findings
 
-Summarize what is present and what is missing. Then walk the user through the domain docs decision.
+Summarize what is present and missing.
 
-**Section A -- Issue tracker.**
+**Issue tracker:** CodexKit uses Beads (`br`) as the local executable issue graph. Workflows publish PRDs and implementation beads into `.beads/`; `bv` is used for graph-aware planning and swarm selection. No GitHub/GitLab tracker is configured by this workflow.
 
-> Explainer: CodexKit uses local markdown issues for this repo. Downstream workflows publish PRDs and implementation issues under `.scratch/<feature>/`, so work stays in the repository and does not require an external issue tracker.
+**Local state:** CodexKit stores lightweight coordination state in `.codexkit/`, including reservations and handoff files for `execute` and `swarm`.
 
-Default: local markdown. Do not offer external tracker choices.
+**Domain docs:** Confirm whether the repo has one global context or multiple contexts.
 
-**Section B -- Domain docs.**
-
-> Explainer: Some workflows read `CONTEXT.md` to learn the project's domain language, and `docs/adr/` for past architectural decisions. They need to know whether the repo has one global context or multiple (e.g. a monorepo with separate frontend/backend contexts) so they look in the right place.
-
-Confirm the layout:
-
-- **Single-context** -- one `CONTEXT.md` + `docs/adr/` at the repo root. Most repos are this.
-- **Multi-context** -- `CONTEXT-MAP.md` at the root pointing to per-context `CONTEXT.md` files (typically a monorepo).
+- **Single-context** -- one `CONTEXT.md` + `docs/adr/` at the repo root.
+- **Multi-context** -- `CONTEXT-MAP.md` at the root pointing to per-context `CONTEXT.md` files.
 
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
-- The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`
+- The `## Agent skills` block for `CLAUDE.md` or `AGENTS.md`
+- `docs/agents/issue-tracker.md`
+- `docs/agents/domain.md`
 
 Let them edit before writing.
 
 ### 4. Write
 
-**Pick the file to edit:**
+Pick the file to edit:
 
 - If `CLAUDE.md` exists, edit it.
 - Else if `AGENTS.md` exists, edit it.
-- If neither exists, ask the user which one to create -- don't pick for them.
+- If neither exists, ask the user which one to create.
 
-Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa) -- always edit the one that's already there.
-
-If an `## Agent skills` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
+If an `## Agent skills` block already exists, update it in-place.
 
 The block:
 
@@ -67,41 +62,53 @@ The block:
 
 ### Issue tracker
 
-Local markdown in `.scratch/<feature-slug>/`. See `docs/agents/issue-tracker.md`.
+Beads in `.beads/`. See `docs/agents/issue-tracker.md`.
+
+### CodexKit state
+
+Local execution state and reservations live in `.codexkit/`.
 
 ### Domain docs
 
 [one-line summary of layout -- single-context or multi-context]. See `docs/agents/domain.md`.
 ```
 
-Then write the two docs files using the seed templates below:
+Write the docs files using the seed templates below.
 
-- For issue tracker: use the local markdown seed below.
-- For domain docs: record the layout and any consumer rules.
+## Seed Templates
 
-## Seed templates
-
-### Local markdown issue tracker
+### Beads issue tracker
 
 ```markdown
-# Issue tracker: Local Markdown
+# Issue tracker: Beads
 
-Issues and PRDs for this repo live as markdown files in `.scratch/`.
+Executable work for this repo lives in Beads under `.beads/`.
+
+## Tools
+
+- `br` manages issues, dependencies, status, and JSONL sync.
+- `bv` reads the Beads graph for robot triage, ready work, parallel plans, critical paths, and cycles.
 
 ## Conventions
 
-- One feature per directory: `.scratch/<feature-slug>/`
-- The PRD is `.scratch/<feature-slug>/PRD.md`
-- Implementation issues are `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`
-- Comments and conversation history append to the bottom of the file under a `## Comments` heading
+- PRD/feature work starts with a parent feature bead.
+- Implementation work is split into child task beads.
+- Dependencies are explicit: `br dep add <issue> <depends-on>`.
+- `br ready --json` shows unblocked work.
+- `bv --robot-plan` and `bv --robot-triage` guide swarm execution.
+- TDD notes may be stored in the bead when supported or under `.codexkit/tdd/<bead-id>.md`.
 
 ## When a workflow says "publish to the issue tracker"
 
-Create a new file under `.scratch/<feature-slug>/`, creating directories as needed.
+Create or update Beads with `br`, then run `br sync --flush-only`.
 
 ## When a workflow says "fetch the relevant ticket"
 
-Read the file at the referenced path. The user will normally pass the path or issue number directly.
+Use `br show <id> --json`.
+
+## No external tracker
+
+This repo does not use GitHub or GitLab issues for CodexKit workflows unless the user explicitly adds that integration later.
 ```
 
 ### Domain docs
@@ -135,4 +142,4 @@ If output contradicts an existing ADR, surface the conflict explicitly instead o
 
 ### 5. Done
 
-Tell the user the setup is complete and which workflows will now read from these files. Mention they can edit `docs/agents/*.md` directly later -- re-running this workflow is only necessary if they want to restart local context setup.
+Tell the user setup is complete and that `plan`, `tdd`, `execute`, and `swarm` now read Beads/state/domain docs from these files.

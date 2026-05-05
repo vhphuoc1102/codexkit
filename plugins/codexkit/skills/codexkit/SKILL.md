@@ -42,7 +42,10 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
   - `setup skill`, `setup agent context`, `setup issue tracker` -> `setup-agent-context`
   - `grill`, `grill me`, `grill-with-docs` -> `grill-with-docs`
   - `to-prd`, `create PRD`, `turn this into PRD` -> `plan`
-  - `to-issues`, `turn plan into issues`, `create issues` -> `plan`
+  - `to-issues`, `turn plan into issues`, `create issues`, `create beads`, `turn plan into beads` -> `plan`
+  - `tdd`, `test-first`, `tdd bead` -> `tdd`
+  - `create`, `execute`, `execute bead`, `run bead`, `work on br-` -> `execute`
+  - `orchestrate`, `swarm`, `swarm beads`, `multi agent` -> `swarm`
   - `review workflow` -> `review`
   - `ship workflow` -> `ship`
 - If the user asks to use a workflow from CodexKit and the repository is not scaffolded yet, explain that the workflow lives in the project scaffold and suggest `npx @vhphuoc1102/codexkit init` or `npx @vhphuoc1102/codexkit install`.
@@ -79,6 +82,11 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - `grill kế hoạch này` -> resolve to `.agents/workflows/grill-with-docs.md` in the current repository and follow that workflow
 - `setup issue tracker cho repo này` -> resolve to `.agents/workflows/setup-agent-context.md` in the current repository and follow that workflow
 - `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and use the issue breakdown branch
+- `turn this plan into beads` -> resolve to `.agents/workflows/plan.md` in the current repository and publish Beads
+- `tdd br-123` -> resolve to `.agents/workflows/tdd.md` in the current repository
+- `execute br-123` -> resolve to `.agents/workflows/execute.md` in the current repository
+- `run bead br-123` -> resolve to `.agents/workflows/execute.md` in the current repository
+- `swarm ready beads` -> resolve to `.agents/workflows/swarm.md` in the current repository
 - `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and use the PRD branch
 - `use the plan workflow from CodexKit` -> resolve to `.agents/workflows/plan.md` in the current repository and follow it directly
 - `follow the review workflow in this repo` -> use `.agents/workflows/review.md` from the workspace, not the npm package

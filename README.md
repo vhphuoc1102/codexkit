@@ -42,12 +42,13 @@ npx @vhphuoc1102/codexkit init --path ./my-project
 
 - root routing docs: `AGENTS.md`, `ARCHITECTURE.md`, `AGENT_FLOW.md`
 - 40+ shipped skills in `.agents/skills`
-- 19 workflow playbooks in `.agents/workflows`
+- 20 workflow playbooks in `.agents/workflows`
 - 16 focused subagents in `.codex/agents`
+- Beads-first planning/execution workflows: `plan`, `tdd`, `execute`, and `swarm`
 - Impeccable UI/UX skill and workflow for design work
 - project-scoped Codex config in `.codex/config.toml`
 - optional Codex execution rules in `codex/rules/default.rules`
-- managed-file tracking in `.codexkit/manifest.json`
+- managed-file tracking plus lightweight execution state helpers in `.codexkit/`
 
 ## CLI
 
