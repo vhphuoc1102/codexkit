@@ -37,11 +37,11 @@ Once the primary mode is clear, route to the narrowest workflow:
 | initial repository agent setup, local issue tracker, or domain docs | `setup-agent-context.md` |
 | vague feature or strategy request | `brainstorm.md` |
 | challenge, grill, or stress-test an idea/plan/spec | `grill-with-docs.md` |
-| user asks for an implementation plan | `plan.md` |
-| PRD or business logic to screen architecture | `screen-spec.md` |
+| implementation plan, PRD/product spec creation, or issue breakdown | `plan.md` |
+| existing PRD or business logic to screen architecture | `screen-spec.md` |
 | UI or UX design direction work | `impeccable.md` |
 | implement an existing Figma design in code | `figma-to-code.md` |
-| new feature or structured code work | `create.md` |
+| new feature or structured code work | `execute.md` |
 | iterative change to an existing feature | `enhance.md` |
 | bug or regression investigation | `debug.md` |
 | review or audit request | `review.md` |

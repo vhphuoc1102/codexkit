@@ -1,6 +1,6 @@
 {
   "name": "codexkit",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "CodexKit plugin for scaffolding repositories, using local CodexKit workflows, discovering shipped skills, and setting up local Codex.",
   "author": {
     "name": "vhphuoc1102",

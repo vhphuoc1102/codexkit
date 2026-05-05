@@ -78,8 +78,8 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - `business logic to screens` -> resolve to `.agents/workflows/screen-spec.md` in the current repository and follow that workflow
 - `grill kế hoạch này` -> resolve to `.agents/workflows/grill-with-docs.md` in the current repository and follow that workflow
 - `setup issue tracker cho repo này` -> resolve to `.agents/workflows/setup-agent-context.md` in the current repository and follow that workflow
-- `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and use the issue breakdown branch
-- `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and use the PRD branch
+- `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the issue output path
+- `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the PRD output path
 - `use the plan workflow from CodexKit` -> resolve to `.agents/workflows/plan.md` in the current repository and follow it directly
 - `follow the review workflow in this repo` -> use `.agents/workflows/review.md` from the workspace, not the npm package
 - The shipped MCP bundle currently includes `context7` and a commented `mysql` example using `@benborla29/mcp-server-mysql`.

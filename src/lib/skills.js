@@ -35,6 +35,7 @@ const SKILL_DEFINITIONS = [
   ["nextjs-react-expert", "Frontend & UI", "React or Next.js architecture, rendering, and performance."],
   ["tailwind-patterns", "Frontend & UI", "Tailwind CSS v4 patterns, tokens, and utility architecture."],
   ["web-design-guidelines", "Frontend & UI", "UI audits against structured web interface guidelines."],
+  ["impeccable", "Frontend & UI", "Production-grade frontend interface design, critique, polish, and iteration."],
   ["i18n-localization", "Frontend & UI", "Translations, locale files, RTL support, and hardcoded string checks."],
   ["game-development", "Frontend & UI", "Game-project routing and platform-specific game skill selection."],
   ["bug-hunt", "Debugging & Review", "Disciplined reproduction, scoping, and root-cause isolation."],

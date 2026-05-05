@@ -38,7 +38,7 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 │   └── workflows/
 │       ├── brainstorm.md
 │       ├── check.md
-│       ├── create.md
+│       ├── execute.md
 │       ├── debug.md
 │       ├── deploy.md
 │       ├── enhance.md

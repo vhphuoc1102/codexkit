@@ -19,7 +19,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
 ### Planning and Discovery
 
 - Use `.agents/workflows/brainstorm.md` for vague or strategic requests.
-- Use `.agents/workflows/plan.md` when the user wants a task breakdown before code changes.
+- Use `.agents/workflows/plan.md` when the user wants an implementation plan, PRD/product spec, `to-prd`, issue breakdown, `to-issues`, or implementation tickets.
 - Use `.agents/workflows/grill-with-docs.md` when the user says `grill`, `grill me`, asks to challenge an idea, or wants a plan/spec stress-tested against project context.
 - Prefer the `planner` subagent for decomposition, success criteria, and sequencing.
 - Prefer the `explorer` subagent when repository mapping or dependency tracing is the immediate need.
@@ -32,9 +32,9 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 ### Implementation
 
-- Use `.agents/workflows/create.md` for new features or structured code generation.
+- Use `.agents/workflows/execute.md` for new features or structured code generation.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
-- Use `.agents/workflows/screen-spec.md` first when PRD/business logic needs to become screen inventory, screen flow, and UI states.
+- Use `.agents/workflows/screen-spec.md` when an existing PRD or business logic needs to become screen inventory, screen flow, and UI states.
 - Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.
 - Use `.agents/workflows/figma-to-code.md` when the task is to implement an existing Figma frame or flow into the current codebase.
 - Prefer the `implementer` subagent for scoped code changes after the task is clear.

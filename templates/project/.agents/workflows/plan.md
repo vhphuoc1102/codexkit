@@ -1,118 +1,142 @@
 # Plan Workflow
 
-Use this workflow when the user wants an implementation plan before code changes.
+Use this workflow when the user wants an implementation plan, PRD, product spec, or issues from existing context.
+
+This workflow is guidance, not an artifact filename. Do not create a `plan.md` file unless the user explicitly asks for a plan file.
 
 ## Goal
 
-Produce a decision-complete plan that someone could execute without re-discovering the problem.
+Produce a grounded planning output from the current conversation and repository context:
+
+- a concise implementation plan when the user asks for a plan
+- a PRD or product spec when the user asks for `to-prd`, `create PRD`, or feature specification
+- issue slices when the user asks for `to-issues`, implementation tickets, or issue breakdown
+- issue slices automatically after a large PRD
 
 ## Process
 
 1. Inspect the current code or repository layout first.
-2. Define:
-   - target behavior
-   - explicit non-goals
-   - dependencies and constraints
-3. Break the work into sequenced implementation steps.
-4. Capture API, data, migration, and config changes if any.
-5. Call out risky assumptions and open questions.
-6. Define validation and acceptance criteria.
+2. Synthesize what is already known from the conversation and repository context.
+3. Ground the output in project vocabulary from domain docs, existing tests, ADRs, and code conventions.
+4. Produce the requested planning output.
+5. For PRDs, apply the large-PRD auto-issues gate.
+6. Publish PRDs or issues only through the configured issue tracker in `docs/agents/issue-tracker.md`. If no tracker is configured, output the PRD or issue drafts in Markdown and say what setup is missing.
 
-## Good Plan Characteristics
+## Concise Implementation Plan
 
-- grounded in the real repository, not generic advice
-- ordered by dependency
-- explicit about risks and unknowns
-- clear about what will be validated at the end
-
-## Output Shape
+When the user asks for a plan before implementation, output:
 
 - short objective
 - current-state summary
-- step-by-step plan
+- step-by-step implementation plan
+- API, data, migration, config, or UI changes
 - risks and open questions
-- validation plan
+- validation and acceptance criteria
 
-## Extended Outputs
+Good plans are grounded in the real repository, ordered by dependency, explicit about risks, and clear about final validation.
 
-When the user asks, extend this workflow into one of two optional branches.
+## PRD Output
 
-### Branch A -- Produce a PRD
+When the user asks for a PRD, product spec, or feature specification, synthesize what is already known. Do not interview the user by default. Ask only when a missing decision would materially change the PRD.
 
-Synthesize the current conversation context and codebase understanding into a PRD. Do NOT interview the user -- synthesize what you already know.
+Before writing the PRD:
 
-The PRD should include:
+- understand the current codebase enough to describe current state
+- identify major modules or product areas to build or modify
+- look for deep modules: small public interfaces with substantial implementation behind them
+- identify which behaviors need tests and what prior tests in the repo are relevant
 
-- **Problem Statement** -- the problem the user is facing, from their perspective
-- **Solution** -- the solution from the user's perspective
-- **User Stories** -- a long, numbered list in the format: As a <actor>, I want a <feature>, so that <benefit>. Cover all aspects of the feature.
-- **Implementation Decisions** -- modules to build or modify, interfaces, architectural decisions, schema changes, API contracts. Do NOT include specific file paths or code snippets.
-- **Testing Decisions** -- what makes a good test, which modules to test, prior art for tests in the codebase
-- **Out of Scope** -- what is not covered
-- **Further Notes** -- any remaining notes
+PRD body:
 
-Publish the PRD using the configured issue tracker described in `docs/agents/issue-tracker.md`.
+```markdown
+## Problem Statement
 
-### Branch B -- Break into issues
+The problem the user is facing, from the user's perspective.
 
-Turn the approved plan into independently-grabbable issues using vertical slices (tracer bullets).
+## Solution
 
-#### 1. Gather context
+The solution from the user's perspective.
 
-Work from the approved plan and current conversation context. If the user passes an issue reference, fetch it from the issue tracker.
+## User Stories
 
-#### 2. Explore the codebase (optional)
+1. As a <actor>, I want a <feature>, so that <benefit>.
 
-If you have not already explored the codebase, do so. Issue titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.
+Include a thorough numbered list that covers the feature end to end.
 
-#### 3. Draft vertical slices
+## Implementation Decisions
 
-Break the plan into tracer bullet issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+- Modules or product areas to build or modify
+- Interfaces and contracts to add or change
+- Architectural decisions
+- Schema, API, configuration, or interaction decisions
+- Technical clarifications already established
 
-Slices may be AFK or HITL:
-- AFK -- can be implemented and merged without human interaction
-- HITL -- requires human interaction (architectural decision or design review)
+Do not include specific file paths or code snippets.
 
-Prefer AFK over HITL where possible.
+## Testing Decisions
 
-Rules:
-- Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
-- A completed slice is demoable or verifiable on its own
-- Prefer many thin slices over few thick ones
+- What makes a good test for this feature
+- Which behaviors and modules should be tested
+- Prior art for similar tests in the codebase
+- Public-interface and integration-style test expectations
 
-#### 4. Quiz the user
+## Out of Scope
 
-Present the proposed breakdown as a numbered list. For each slice, show:
+Things not covered by this PRD.
 
-- **Title** -- short descriptive name
-- **Type** -- AFK / HITL
-- **Blocked by** -- which other slices must complete first
-- **User stories covered** -- which user stories this addresses
+## Further Notes
 
-Ask the user:
-- Does the granularity feel right? (too coarse / too fine)
-- Are the dependency relationships correct?
-- Should any slices be merged or split further?
-- Are the correct slices marked as AFK and HITL?
+Remaining notes, risks, or useful context.
+```
 
-Iterate until the user approves the breakdown.
+If publishing to an issue tracker, apply the configured triage label, normally `needs-triage`, when the tracker conventions support it.
 
-#### 5. Publish the issues
+## Large PRD Auto Issues
 
-For each approved slice, publish a new issue to the configured issue tracker. Read the conventions from `docs/agents/issue-tracker.md`.
+After creating a PRD, automatically produce issue slices when any of these are true:
 
-Publish in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
+- the PRD has more than 5 user stories
+- the work touches 3 or more subsystems or product areas
+- the work spans schema, API, UI, and tests
+- the work needs migration, rollout, permissions, billing, data import/export, or operational coordination
+- the PRD cannot be implemented as one safe, demoable vertical slice
 
-Issue body shape:
+When an issue tracker is configured, publish the PRD first and use its issue identifier as the `Parent` reference for auto-created issues. If no tracker is configured, output the PRD and issue drafts together in Markdown and state that tracker setup is missing.
+
+## Issue Output
+
+When the user asks for issues, implementation tickets, or issue breakdown, work from the current plan, PRD, spec, issue reference, or conversation context. If the user passes an issue reference, fetch and read the issue body and comments before slicing.
+
+Break the work into tracer-bullet vertical slices:
+
+- each issue delivers a narrow but complete path through all relevant layers
+- each completed issue is demoable or independently verifiable
+- prefer many thin slices over a few broad slices
+- avoid horizontal issues that only cover one layer unless that layer is the complete deliverable
+
+Classify each slice:
+
+- `AFK` -- can be implemented and merged without human interaction
+- `HITL` -- needs human interaction, such as design review or architecture decision
+
+Prefer `AFK` where possible.
+
+Publish issues in dependency order so blockers have real issue identifiers before dependent issues reference them.
+
+Issue body:
 
 ```markdown
 ## Parent
 
-A reference to the parent issue (if the source was an existing issue, otherwise omit this section).
+A reference to the parent PRD or source issue, if one exists. Omit this section when there is no parent.
 
 ## What to build
 
 A concise description of this vertical slice. Describe the end-to-end behavior, not layer-by-layer implementation.
+
+## Type
+
+AFK or HITL, with a short reason.
 
 ## Acceptance criteria
 
@@ -122,9 +146,9 @@ A concise description of this vertical slice. Describe the end-to-end behavior, 
 
 ## Blocked by
 
-- A reference to the blocking ticket (if any)
+- A reference to the blocking ticket, if any
 
-Or "None - can start immediately" if no blockers.
+Or: None - can start immediately.
 ```
 
-Do NOT close or modify any parent issue.
+Do not close or modify any parent issue unless the user explicitly asks.
