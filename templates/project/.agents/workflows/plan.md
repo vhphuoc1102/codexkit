@@ -1,17 +1,17 @@
 # Plan Workflow
 
-Use this workflow when the user wants an implementation plan, PRD, product spec, or issues from existing context.
+Use this workflow when the user wants an implementation plan, PRD, product spec, or Beads work graph from existing context.
 
 This workflow is guidance, not an artifact filename. Do not create a `plan.md` file unless the user explicitly asks for a plan file.
 
 ## Goal
 
-Produce a grounded planning output from the current conversation and repository context:
+Produce a grounded planning output from the current conversation and repository context, then turn executable work into Beads when Beads are available:
 
-- a concise implementation plan when the user asks for a plan
-- a PRD or product spec when the user asks for `to-prd`, `create PRD`, or feature specification
-- issue slices when the user asks for `to-issues`, implementation tickets, or issue breakdown
-- issue slices automatically after a large PRD
+- concise implementation plan for small or early planning requests
+- PRD or product spec for `to-prd`, `create PRD`, or feature specification
+- Beads for `to-issues`, implementation tickets, issue breakdown, or approved execution work
+- one source bead for small PRDs, or one epic bead plus child beads for large PRDs
 
 ## Process
 
@@ -19,8 +19,27 @@ Produce a grounded planning output from the current conversation and repository 
 2. Synthesize what is already known from the conversation and repository context.
 3. Ground the output in project vocabulary from domain docs, existing tests, ADRs, and code conventions.
 4. Produce the requested planning output.
-5. For PRDs, apply the large-PRD auto-issues gate.
-6. Publish PRDs or issues only through the configured issue tracker in `docs/agents/issue-tracker.md`. If no tracker is configured, output the PRD or issue drafts in Markdown and say what setup is missing.
+5. For PRDs, publish the PRD through Beads, then apply the large-PRD auto-beads gate.
+6. Publish work through the configured Beads tracker in `docs/agents/issue-tracker.md`. If Beads is not configured or `br`/`bv` is missing, output Markdown bead drafts and state what setup is missing.
+
+## Beads Availability
+
+Before creating work items, check:
+
+```bash
+br --help
+bv --robot-triage --help
+```
+
+If Beads is available:
+
+- read `docs/agents/issue-tracker.md` when present for local conventions
+- create work with `br create --title "..." --type <type> --priority <n>`
+- encode dependencies with `br dep add <bead-id> <depends-on-id>`
+- inspect graph health with `bv --robot-triage` or `bv --robot-insights`
+- export Beads changes with `br sync --flush-only`
+
+If Beads is unavailable, produce Markdown drafts with the intended bead type, title, description, AFK/HITL classification, acceptance criteria, and dependencies. Say whether the missing setup is `br`, `bv`, `.beads/`, or `docs/agents/issue-tracker.md`.
 
 ## Concise Implementation Plan
 
@@ -33,7 +52,7 @@ When the user asks for a plan before implementation, output:
 - risks and open questions
 - validation and acceptance criteria
 
-Good plans are grounded in the real repository, ordered by dependency, explicit about risks, and clear about final validation.
+If the user approves execution work or asks for issues/tickets, create Beads from this plan.
 
 ## PRD Output
 
@@ -89,11 +108,11 @@ Things not covered by this PRD.
 Remaining notes, risks, or useful context.
 ```
 
-If publishing to an issue tracker, apply the configured triage label, normally `needs-triage`, when the tracker conventions support it.
+After writing a small PRD, create one source bead, usually `feature`, with the PRD content in the bead body and acceptance criteria that make the whole vertical slice demoable. Use `task`, `docs`, `bug`, or `question` only when the PRD is not a user-visible feature.
 
-## Large PRD Auto Issues
+## Large PRD Auto-Beads
 
-After creating a PRD, automatically produce issue slices when any of these are true:
+After creating a PRD, automatically produce Beads when any of these are true:
 
 - the PRD has more than 5 user stories
 - the work touches 3 or more subsystems or product areas
@@ -101,40 +120,55 @@ After creating a PRD, automatically produce issue slices when any of these are t
 - the work needs migration, rollout, permissions, billing, data import/export, or operational coordination
 - the PRD cannot be implemented as one safe, demoable vertical slice
 
-When an issue tracker is configured, publish the PRD first and use its issue identifier as the `Parent` reference for auto-created issues. If no tracker is configured, output the PRD and issue drafts together in Markdown and state that tracker setup is missing.
+For a large PRD:
 
-## Issue Output
+1. Create one `epic` bead for the PRD.
+2. Create child beads for vertical slices as `feature`, `task`, `bug`, `docs`, or `question`.
+3. Publish parent work first so child beads can reference the real epic Bead ID.
+4. Link child dependencies with `br dep add`.
+5. Keep the epic open until all child beads are reviewed and the user approves closure.
 
-When the user asks for issues, implementation tickets, or issue breakdown, work from the current plan, PRD, spec, issue reference, or conversation context. If the user passes an issue reference, fetch and read the issue body and comments before slicing.
+## Bead Output
 
-Break the work into tracer-bullet vertical slices:
+When the user asks for `to-issues`, implementation tickets, issue breakdown, or Beads, work from the current plan, PRD, spec, Bead reference, or conversation context. If the user passes a Bead ID, fetch and read it with `br show <id>` before slicing.
 
-- each issue delivers a narrow but complete path through all relevant layers
-- each completed issue is demoable or independently verifiable
-- prefer many thin slices over a few broad slices
-- avoid horizontal issues that only cover one layer unless that layer is the complete deliverable
+Break work into tracer-bullet vertical slices:
 
-Classify each slice:
+- each bead delivers a narrow but complete path through all relevant layers
+- each completed bead is demoable or independently verifiable
+- prefer many thin beads over a few broad beads
+- avoid horizontal beads that only cover one layer unless that layer is the complete deliverable
 
-- `AFK` -- can be implemented and merged without human interaction
-- `HITL` -- needs human interaction, such as design review or architecture decision
+Choose bead type:
 
-Prefer `AFK` where possible.
+- `epic` for large PRDs, multi-phase work, or parent work containers
+- `feature` for user-visible capabilities
+- `bug` for regressions or incorrect behavior
+- `task` for implementation work that is not user-facing by itself
+- `docs` for documentation-only work
+- `question` for blocked decisions requiring human input
 
-Publish issues in dependency order so blockers have real issue identifiers before dependent issues reference them.
+Classify each executable bead:
 
-Issue body:
+- `AFK` when it can be implemented and reviewed without human interaction
+- `HITL` when it needs human input, such as design review, credentials, product decision, or architecture approval
+
+Prefer `AFK` where possible, but do not hide real human dependencies.
+
+Publish beads in dependency order so blockers have real IDs before dependent beads reference them. For large PRD auto-beads, use the epic bead ID as the parent reference.
+
+Bead body:
 
 ```markdown
 ## Parent
 
-A reference to the parent PRD or source issue, if one exists. Omit this section when there is no parent.
+Parent epic bead or source reference, if one exists.
 
 ## What to build
 
-A concise description of this vertical slice. Describe the end-to-end behavior, not layer-by-layer implementation.
+End-to-end behavior for this bead.
 
-## Type
+## Execution mode
 
 AFK or HITL, with a short reason.
 
@@ -144,11 +178,9 @@ AFK or HITL, with a short reason.
 - [ ] Criterion 2
 - [ ] Criterion 3
 
-## Blocked by
+## Dependencies
 
-- A reference to the blocking ticket, if any
-
-Or: None - can start immediately.
+- Blocking bead IDs, or None.
 ```
 
-Do not close or modify any parent issue unless the user explicitly asks.
+Do not close beads during planning. Execution and user approval own closure.

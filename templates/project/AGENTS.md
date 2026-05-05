@@ -6,7 +6,7 @@ Use this repository guide as the first routing layer for Codex work.
 
 - Start by classifying the request: planning, implementation, debugging, review, release, or documentation.
 - Prefer the narrowest workflow that matches the task.
-- Use focused subagents for bounded work instead of one broad parallel swarm.
+- Use focused subagents for bounded work. Use `.agents/workflows/swarm.md` only when multiple ready Beads can be executed independently.
 - Load only the skills that materially improve the current task.
 - Do not run risky scripts or destructive commands without explicit user approval.
 - Use `check` before presenting a normal code change.
@@ -14,12 +14,12 @@ Use this repository guide as the first routing layer for Codex work.
 
 ## Routing
 
-When delegating to a subagent, include the preferred skill set in the task handoff when it is clear from the domain. Do not assume the subagent will guess the best skills from its name alone.
+When delegating to a subagent outside swarm execution, include the preferred skill set in the task handoff when it is clear from the domain. Swarm workers should receive one Bead, expected output, affected scope, and `execute.md`; do not pass explicit skill bundles by default.
 
 ### Planning and Discovery
 
 - Use `.agents/workflows/brainstorm.md` for vague or strategic requests.
-- Use `.agents/workflows/plan.md` when the user wants an implementation plan, PRD/product spec, `to-prd`, issue breakdown, `to-issues`, or implementation tickets.
+- Use `.agents/workflows/plan.md` when the user wants an implementation plan, PRD/product spec, `to-prd`, Beads creation, issue breakdown, `to-issues`, or implementation tickets.
 - Use `.agents/workflows/grill-with-docs.md` when the user says `grill`, `grill me`, asks to challenge an idea, or wants a plan/spec stress-tested against project context.
 - Prefer the `planner` subagent for decomposition, success criteria, and sequencing.
 - Prefer the `explorer` subagent when repository mapping or dependency tracing is the immediate need.
@@ -27,12 +27,13 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 ### Setup and Onboarding
 
-- Use `.agents/workflows/setup-agent-context.md` when the user asks to `setup`, `setup agent context`, `setup issue tracker`, or initialize local agent context for the repository.
-- Use this workflow to create or refresh local domain docs and local markdown issue-tracker guidance.
+- Use `.agents/workflows/setup-agent-context.md` when the user asks to `setup`, `setup agent context`, `setup issue tracker`, set up Beads, or initialize local agent context for the repository.
+- Use this workflow to create or refresh local domain docs and Beads issue-tracker guidance.
 
 ### Implementation
 
-- Use `.agents/workflows/execute.md` for new features or structured code generation.
+- Use `.agents/workflows/execute.md` for new features, structured code generation, or one assigned Bead such as `br-123`.
+- Use `.agents/workflows/swarm.md` for parallel execution of multiple ready Beads selected by the main thread with `br ready` or `bv --robot-triage`.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
 - Use `.agents/workflows/screen-spec.md` when an existing PRD or business logic needs to become screen inventory, screen flow, and UI states.
 - Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.

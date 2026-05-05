@@ -34,14 +34,14 @@ Once the primary mode is clear, route to the narrowest workflow:
 
 | Request Type | Workflow |
 | --- | --- |
-| initial repository agent setup, local issue tracker, or domain docs | `setup-agent-context.md` |
+| initial repository agent setup, Beads issue tracker, or domain docs | `setup-agent-context.md` |
 | vague feature or strategy request | `brainstorm.md` |
 | challenge, grill, or stress-test an idea/plan/spec | `grill-with-docs.md` |
-| implementation plan, PRD/product spec creation, or issue breakdown | `plan.md` |
+| implementation plan, PRD/product spec creation, Beads creation, or issue breakdown | `plan.md` |
 | existing PRD or business logic to screen architecture | `screen-spec.md` |
 | UI or UX design direction work | `impeccable.md` |
 | implement an existing Figma design in code | `figma-to-code.md` |
-| new feature or structured code work | `execute.md` |
+| new feature, structured code work, or one assigned Bead | `execute.md` |
 | iterative change to an existing feature | `enhance.md` |
 | bug or regression investigation | `debug.md` |
 | review or audit request | `review.md` |
@@ -51,7 +51,7 @@ Once the primary mode is clear, route to the narrowest workflow:
 | quick validation | `check.md` |
 | deeper release validation | `verify.md` |
 | deployment preparation or execution | `deploy.md` |
-| multi-subagent coordination | `orchestrate.md` |
+| parallel execution of multiple ready Beads | `swarm.md` |
 | release or handoff summary | `ship.md` |
 
 The workflow gives the process skeleton for the task.

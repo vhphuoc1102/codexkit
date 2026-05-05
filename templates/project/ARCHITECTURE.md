@@ -4,75 +4,81 @@ This document describes the project-level structure installed by CodexKit and ho
 
 ## Overview
 
-The scaffold is built around four layers:
+The scaffold is built around five layers:
 
 - `AGENTS.md` as the routing and operating contract
 - `.agents/skills/` for reusable capability modules
 - `.agents/workflows/` for task playbooks
 - `.codex/agents/` for focused subagents
+- Beads (`br`/`bv`) as the dependency-aware work tracker when the project uses planned work items
 
 Some projects may also include `.agents/.shared/` for reusable script-and-data packages that support multiple workflows.
 
-The goal is to keep the system small, composable, and explicit. Skills provide knowledge, workflows provide process, and subagents provide bounded execution roles.
+The goal is to keep the system small, composable, and explicit. Skills provide knowledge, workflows provide process, subagents provide bounded execution roles, and Beads provide durable work state.
 
 ## Directory Structure
 
 ```text
 .
-├── AGENTS.md
-├── ARCHITECTURE.md
-├── AGENT_FLOW.md
-├── .agents/
-│   ├── skills/
-│   │   ├── clean-code/
-│   │   ├── code-review/
-│   │   ├── debugging/
-│   │   ├── frontend-design/
-│   │   ├── api-patterns/
-│   │   ├── database-design/
-│   │   ├── impeccable/
-│   │   ├── planning/
-│   │   ├── release-readiness/
-│   │   └── testing-patterns/
-│   ├── .shared/
-│   └── workflows/
-│       ├── brainstorm.md
-│       ├── check.md
-│       ├── execute.md
-│       ├── debug.md
-│       ├── deploy.md
-│       ├── enhance.md
-│       ├── orchestrate.md
-│       ├── plan.md
-│       ├── preview.md
-│       ├── review.md
-│       ├── impeccable.md
-│       ├── screen-spec.md
-│       ├── ship.md
-│       ├── status.md
-│       ├── test.md
-│       └── verify.md
-├── .codex/
-│   ├── config.toml
-│   └── agents/
-│       ├── backend-specialist.toml
-│       ├── database-architect.toml
-│       ├── debugger.toml
-│       ├── devops-engineer.toml
-│       ├── docs-researcher.toml
-│       ├── documentation-writer.toml
-│       ├── explorer.toml
-│       ├── frontend-specialist.toml
-│       ├── implementer.toml
-│       ├── mobile-developer.toml
-│       ├── performance-optimizer.toml
-│       ├── planner.toml
-│       ├── reviewer.toml
-│       ├── security-auditor.toml
-│       ├── seo-specialist.toml
-│       └── test-writer.toml
-└── .codexkit/
-    └── manifest.json
+|-- AGENTS.md
+|-- ARCHITECTURE.md
+|-- AGENT_FLOW.md
+|-- .agents/
+|   |-- skills/
+|   |   |-- clean-code/
+|   |   |-- code-review/
+|   |   |-- debugging/
+|   |   |-- frontend-design/
+|   |   |-- api-patterns/
+|   |   |-- database-design/
+|   |   |-- impeccable/
+|   |   |-- planning/
+|   |   |-- release-readiness/
+|   |   `-- testing-patterns/
+|   |-- .shared/
+|   `-- workflows/
+|       |-- brainstorm.md
+|       |-- check.md
+|       |-- execute.md
+|       |-- debug.md
+|       |-- deploy.md
+|       |-- enhance.md
+|       |-- plan.md
+|       |-- preview.md
+|       |-- review.md
+|       |-- impeccable.md
+|       |-- screen-spec.md
+|       |-- setup-agent-context.md
+|       |-- ship.md
+|       |-- status.md
+|       |-- swarm.md
+|       |-- test.md
+|       `-- verify.md
+|-- .codex/
+|   |-- config.toml
+|   |-- codexkit_bead_state.mjs
+|   `-- agents/
+|       |-- backend-specialist.toml
+|       |-- database-architect.toml
+|       |-- debugger.toml
+|       |-- devops-engineer.toml
+|       |-- docs-researcher.toml
+|       |-- documentation-writer.toml
+|       |-- explorer.toml
+|       |-- frontend-specialist.toml
+|       |-- implementer.toml
+|       |-- mobile-developer.toml
+|       |-- performance-optimizer.toml
+|       |-- planner.toml
+|       |-- reviewer.toml
+|       |-- security-auditor.toml
+|       |-- seo-specialist.toml
+|       `-- test-writer.toml
+|-- .beads/
+|   `-- beads.jsonl
+`-- .codexkit/
+    |-- manifest.json
+    `-- bead-state.json
 ```
 
 ## Responsibilities
@@ -86,6 +92,7 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 - routing from workflow to subagent or skill
 - validation expectations
 - approval boundaries for risky execution
+- Beads usage and close-approval expectations
 
 This is the first file Codex should consult when deciding how to approach work in the repository.
 
@@ -112,8 +119,8 @@ They define repeatable playbooks for common task types such as:
 - brainstorming
 - setup and onboarding
 - challenging and stress-testing plans
-- planning
-- creating
+- planning and creating Beads
+- executing normal work or one assigned Bead
 - enhancing
 - debugging
 - reviewing
@@ -124,10 +131,22 @@ They define repeatable playbooks for common task types such as:
 - deploying
 - previewing
 - status reporting
-- orchestrating
+- swarming across multiple ready Beads
 - shipping
 
 Workflows should encode process, not domain knowledge.
+
+### Beads
+
+CodexKit treats Beads as the default issue tracker for scaffolded projects that need durable work items.
+
+- `plan.md` creates PRD, epic, feature, task, bug, docs, or question Beads with `br create`.
+- `execute.md` executes one assigned Bead or normal non-Bead implementation work.
+- `swarm.md` selects ready Beads with `br ready` and `bv --robot-triage`, assigns one Bead per worker, then runs one aggregate `check.md` or `verify.md` pass.
+- `br sync --flush-only` exports Beads state; it does not run git commands.
+- Beads are not closed automatically. User approval is required before `br close`.
+
+The local helper `.codex/codexkit_bead_state.mjs` tracks same-session execution state in `.codexkit/bead-state.json`: active, deferred, completed, failed, awaiting user close, review cycles, and swarm validation cycles.
 
 ### Shared Packages
 
@@ -160,7 +179,7 @@ Each subagent should own a bounded role:
 - `devops_engineer` for CI, deploy, and operational changes
 - `test_writer` for focused test additions
 
-Subagents should be specialized enough that routing is predictable.
+Subagents should be specialized enough that routing is predictable. Swarm workers receive one explicit Bead and the `execute.md` workflow; they do not choose their own Beads.
 
 ### MCP Configuration
 
@@ -180,9 +199,10 @@ The default scaffold includes a ready-to-use Context7 MCP entry and commented ex
 
 ## Design Principles
 
-- Keep responsibilities separate: knowledge, process, and execution should not be mixed together casually.
+- Keep responsibilities separate: knowledge, process, execution, and work state should not be mixed casually.
 - Prefer a small core that teams can extend, instead of a large catalog with overlapping instructions.
 - Make risky behavior explicit and approval-gated.
+- Keep Bead ownership explicit: the main thread assigns, workers execute, reviewer checks, and the user approves closure.
 - Optimize for maintainability of the kit itself, not just first-run convenience.
 
 ## Extension Model

@@ -39,10 +39,12 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - Normalize common workflow aliases before acting:
   - `impeccable`, `design`, `ui`, `ux`, `frontend design` -> `impeccable`
   - `screen spec`, `screen architecture`, `screen flow`, `business logic to screens`, `prd to screens` -> `screen-spec`
-  - `setup skill`, `setup agent context`, `setup issue tracker` -> `setup-agent-context`
+  - `setup skill`, `setup agent context`, `setup issue tracker`, `setup beads` -> `setup-agent-context`
   - `grill`, `grill me`, `grill-with-docs` -> `grill-with-docs`
   - `to-prd`, `create PRD`, `turn this into PRD` -> `plan`
-  - `to-issues`, `turn plan into issues`, `create issues` -> `plan`
+  - `to-issues`, `turn plan into issues`, `create issues`, `create beads` -> `plan`
+  - `execute bead`, `work on bead`, `work on br-###` -> `execute`
+  - `swarm`, `run ready beads`, `parallel beads` -> `swarm`
   - `review workflow` -> `review`
   - `ship workflow` -> `ship`
 - If the user asks to use a workflow from CodexKit and the repository is not scaffolded yet, explain that the workflow lives in the project scaffold and suggest `npx @vhphuoc1102/codexkit init` or `npx @vhphuoc1102/codexkit install`.
@@ -63,6 +65,7 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - If the user asks for initial full setup in the current repository, run `npx @vhphuoc1102/codexkit setup-codex`.
 - If the user asks to use a CodexKit workflow in the current repository, first check whether `.agents/workflows/<name>.md` exists in the workspace and then follow that workflow locally.
 - If the user asks for a workflow by an alias such as `prd to screens`, map it to the canonical file name `screen-spec`.
+- If the user asks for Beads planning, map it to `plan`; if they ask to execute one Bead, map it to `execute`; if they ask to run multiple ready Beads in parallel, map it to `swarm`.
 - If the repository has CodexKit scaffolding and the workflow file exists, do not search npm, package cache, or remote docs first.
 - If the workflow file does not exist, explain that the repository is missing the scaffolded workflow and then suggest the smallest relevant scaffold command.
 
@@ -78,9 +81,12 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - `business logic to screens` -> resolve to `.agents/workflows/screen-spec.md` in the current repository and follow that workflow
 - `grill kế hoạch này` -> resolve to `.agents/workflows/grill-with-docs.md` in the current repository and follow that workflow
 - `setup issue tracker cho repo này` -> resolve to `.agents/workflows/setup-agent-context.md` in the current repository and follow that workflow
-- `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the issue output path
+- `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the Beads output path
+- `create beads from this PRD` -> resolve to `.agents/workflows/plan.md` in the current repository and create Beads or Markdown bead drafts
 - `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the PRD output path
 - `use the plan workflow from CodexKit` -> resolve to `.agents/workflows/plan.md` in the current repository and follow it directly
+- `execute br-123` -> resolve to `.agents/workflows/execute.md` in the current repository and execute that assigned Bead
+- `run ready beads in parallel` -> resolve to `.agents/workflows/swarm.md` in the current repository and assign ready Beads through the swarm workflow
 - `follow the review workflow in this repo` -> use `.agents/workflows/review.md` from the workspace, not the npm package
 - The shipped MCP bundle currently includes `context7` and a commented `mysql` example using `@benborla29/mcp-server-mysql`.
 
