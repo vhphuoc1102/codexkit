@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.8] - 2026-05-06
+
+Release: [v0.1.8](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.8)
+
+### Improved
+
+- Updated the status workflow to include Beads and same-session bead state manager checks when available.
+
 ## [v0.1.4] - 2026-04-02
 
 Release: [v0.1.4](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.4)
