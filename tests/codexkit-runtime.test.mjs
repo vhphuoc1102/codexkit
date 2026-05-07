@@ -236,6 +236,16 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(workerReference, /## Aggregate-Fix Assignment/);
   assert.match(workerReference, /aggregate failing command and output/);
 
+  const statusWorkflow = fs.readFileSync(path.join(TEMPLATE_ROOT, ".agents", "workflows", "status.md"), "utf8");
+  assert.doesNotMatch(statusWorkflow, /codexkit_bead_state/);
+  assert.match(statusWorkflow, /node \.codex\/codexkit_status\.mjs --json/);
+  assert.match(statusWorkflow, /\.codexkit\/state\.json/);
+  assert.match(statusWorkflow, /\.codexkit\/HANDOFF\.json/);
+  assert.match(statusWorkflow, /active reservations/);
+  assert.match(statusWorkflow, /active workers/);
+  assert.match(statusWorkflow, /locked batch scope/);
+  assert.match(statusWorkflow, /mapped or unmapped aggregate failures/);
+
   const pluginSkill = fs.readFileSync(path.join(ROOT, "plugins", "codexkit", "skills", "codexkit", "SKILL.md"), "utf8");
   assert.match(pluginSkill, /`swarm`, `run ready beads`, `parallel beads` -> `execute`/);
   assert.match(pluginSkill, /execute br-123/);
