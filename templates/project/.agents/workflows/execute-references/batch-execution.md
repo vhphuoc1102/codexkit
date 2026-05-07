@@ -29,7 +29,25 @@ Before spawning, write down the locked batch scope: user request, epic or graph 
 - Work outside the locked scope is recorded in `next_action`; it is not spawned in the current batch.
 - If scope is unclear, stop and ask for the smallest decision instead of widening the batch.
 
+## Agent Type Selection Contract
+
+Choose the most specific available execution agent before spawning. Specialist agents are still execution workers: they receive exactly one `assigned_bead_id`, use Assigned Bead Execution, never choose their own Bead, reserve before writing, verify, release reservations, and return exactly one final status.
+
+- `frontend_specialist`: UI, interaction, React, Next.js, Tailwind, or Figma-related Beads
+- `backend_specialist`: APIs, services, auth, server logic, Node.js, or Python backend Beads
+- `database_architect`: schema, migration, query, indexing, or data modeling Beads
+- `mobile_developer`: mobile application or mobile UX Beads
+- `test_writer`: test-only Beads or aggregate-fix work dominated by tests
+- `debugger`: blocked or failing Bead investigation before write-heavy fixes
+- `worker` or `implementer`: mixed, small, unclear, or fallback execution work
+
+If the runtime cannot spawn the selected specialist type, fall back to `worker` or `implementer` and keep the same one-Bead worker contract.
+
 ## Worker Spawn Prompt
+
+```text
+spawn_agent(agent_type="<AGENT_TYPE>", message="<WORKER_PROMPT>", fork_context=false)
+```
 
 ```text
 You are a CodexKit worker subagent.
@@ -37,10 +55,16 @@ You are a CodexKit worker subagent.
 Identity:
 - Codex nickname: <CODEX_SUBAGENT_NAME>
 - Agent ID: <AGENT_ID>
+- Agent type: <AGENT_TYPE>
 - Epic ID: <EPIC_ID or none>
 - Assigned Bead ID: <ASSIGNED_BEAD_ID>
 - Feature: <FEATURE_NAME or none>
 - Project root: <PROJECT_ROOT>
+- Locked batch scope: <LOCKED_BATCH_SCOPE>
+- Affected scope: <FILES_OR_SUBSYSTEMS>
+- Expected output: <EXPECTED_OUTPUT>
+- Verification command: <VERIFY_COMMAND>
+- Spawn context: fork_context=false
 
 Contract:
 - Use `.agents/workflows/execute.md` Assigned Bead Execution.

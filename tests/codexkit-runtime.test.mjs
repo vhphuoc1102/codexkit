@@ -195,6 +195,14 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
     "utf8",
   );
   assert.match(batchReference, /## Batch Scope Contract/);
+  assert.match(batchReference, /## Agent Type Selection Contract/);
+  assert.match(batchReference, /spawn_agent\(agent_type="<AGENT_TYPE>", message="<WORKER_PROMPT>", fork_context=false\)/);
+  assert.match(batchReference, /frontend_specialist/);
+  assert.match(batchReference, /backend_specialist/);
+  assert.match(batchReference, /database_architect/);
+  assert.match(batchReference, /test_writer/);
+  assert.match(batchReference, /never choose their own Bead/);
+  assert.match(batchReference, /Use `.agents\/workflows\/execute\.md` Assigned Bead Execution/);
   assert.match(batchReference, /## Continuation Rules/);
   assert.match(batchReference, /assigned -> running -> done \| blocked \| handoff \| noop/);
   assert.match(batchReference, /Do not expand from the full `br ready` queue/);
