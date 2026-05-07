@@ -13,6 +13,16 @@ Choose exactly one mode:
 
 If the requested work is vague, blocked, or missing acceptance criteria, stop and route to planning or ask for the smallest clarifying decision.
 
+## Reference Files
+
+Open these only when the matching mode needs exact prompts, field shapes, or recovery details:
+
+| File | When to load |
+| --- | --- |
+| `.agents/workflows/execute-references/worker-details.md` | Assigned Bead worker execution, worker prompts, result fields, reservation conflict details |
+| `.agents/workflows/execute-references/batch-execution.md` | Batch Execution orchestration, worker spawn prompt, tend loop, completion checklist |
+| `.agents/workflows/execute-references/handoff.md` | Writing or resuming `.codexkit/HANDOFF.json` |
+
 ## Direct Execution
 
 Input:
@@ -30,6 +40,8 @@ Process:
 5. Summarize changed behavior, validation, skipped checks, and residual risk.
 
 ## Assigned Bead Execution
+
+Load `.agents/workflows/execute-references/worker-details.md` when running as a worker or when exact worker result fields are needed.
 
 Input:
 
@@ -70,6 +82,8 @@ Do not auto-close Beads and do not auto-commit. After verification passes, retur
 
 ## Batch Execution
 
+Load `.agents/workflows/execute-references/batch-execution.md` before spawning workers or tending a live batch.
+
 Use Batch Execution for multiple independent ready Beads.
 
 Orchestrator process:
@@ -104,6 +118,8 @@ Rules:
 - Silence alone is not failure. Inspect graph, reservations, and worker status before interrupting.
 
 ## Resume From Handoff
+
+Load `.agents/workflows/execute-references/handoff.md` before writing, reading, or clearing `.codexkit/HANDOFF.json`.
 
 When `.codexkit/HANDOFF.json` exists:
 

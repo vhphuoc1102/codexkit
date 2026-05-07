@@ -171,11 +171,19 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
     ".codex/hooks/codexkit_session_start.mjs",
     ".codex/hooks/codexkit_stop.mjs",
     ".codex/hooks.json",
+    ".agents/workflows/execute-references/worker-details.md",
+    ".agents/workflows/execute-references/batch-execution.md",
+    ".agents/workflows/execute-references/handoff.md",
   ];
   for (const relativePath of required) {
     assert.equal(fs.existsSync(path.join(TEMPLATE_ROOT, relativePath)), true, relativePath);
   }
   assert.equal(fs.existsSync(path.join(TEMPLATE_ROOT, ".agents", "workflows", "swarm.md")), false);
+
+  const executeWorkflow = fs.readFileSync(path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute.md"), "utf8");
+  assert.match(executeWorkflow, /execute-references\/worker-details\.md/);
+  assert.match(executeWorkflow, /execute-references\/batch-execution\.md/);
+  assert.match(executeWorkflow, /execute-references\/handoff\.md/);
 
   const pluginSkill = fs.readFileSync(path.join(ROOT, "plugins", "codexkit", "skills", "codexkit", "SKILL.md"), "utf8");
   assert.match(pluginSkill, /`swarm`, `run ready beads`, `parallel beads` -> `execute`/);

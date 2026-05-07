@@ -43,6 +43,10 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |       |-- deploy.md
 |       |-- enhance.md
 |       |-- execute.md
+|       |-- execute-references/
+|       |   |-- batch-execution.md
+|       |   |-- handoff.md
+|       |   `-- worker-details.md
 |       |-- plan.md
 |       |-- preview.md
 |       |-- review.md
