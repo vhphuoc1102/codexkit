@@ -91,6 +91,28 @@ After each worker result, update `.codexkit/state.json` before spawning or askin
 
 If a worker result does not start with `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`, do not infer success. Ask the worker to normalize the result if it is still reachable; otherwise mark the worker `[BLOCKED]` with missing result evidence.
 
+## Aggregate Failure Mapping
+
+When aggregate `check.md` or `verify.md` fails after worker-level verification, map each failure to a Bead in the locked batch scope before fixing it.
+
+Use concrete evidence: failed files, worker-touched files, test names, package or module ownership, error text, Bead acceptance criteria, and verification criteria. Record the mapped Bead, mapping reason, confidence or ambiguity, and `next_action` in `.codexkit/state.json`.
+
+- If the mapping is clear, spawn or reassign a worker for that mapped Bead.
+- If one failure crosses multiple Beads, split only when each part maps cleanly; otherwise mark the batch path `[BLOCKED]`.
+- If no in-scope Bead owns the failure, do not create hidden work. Record the unmapped failure and ask the user for scope or planning.
+
+## Fix Worker Reassignment
+
+A fix worker is still an Assigned Bead Execution worker. Give it exactly one mapped Bead id plus the original worker result, aggregate failing command and output, suspected files, reservation expectations, and required verification.
+
+The fix worker must reserve before writing, fix the root cause inside the mapped Bead context, run the Bead verification and the aggregate failing command, release reservations, and return `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
+
+## Orchestrator Rescue Boundaries
+
+The Batch Execution orchestrator does not implement Bead fixes. It may inspect logs, classify failures, reconcile graph state, sweep or release stale reservations when safe, update `.codexkit/state.json`, and spawn or reassign workers.
+
+The main thread may implement code only outside Batch Execution, in Assigned Bead Execution running in the main thread, or when the user explicitly overrides the orchestration rule.
+
 ## Completion Checklist
 
 Before declaring Batch Execution complete:
@@ -100,6 +122,7 @@ Before declaring Batch Execution complete:
 - no active reservations remain for completed workers
 - blocked or noop Beads have explicit next actions
 - aggregate `check.md` or `verify.md` has run clean after worker-level verification
+- aggregate failures are either fixed by mapped Bead workers or blocked with explicit unmapped reasons
 - `.codexkit/state.json` active workers are cleared or accurately marked final
 - user has not been asked to close Beads until verification is clean
 

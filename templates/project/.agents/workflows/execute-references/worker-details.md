@@ -117,6 +117,12 @@ The final worker message must start with exactly one status: `[DONE]`, `[BLOCKED
 
 If the worker cannot provide verification evidence, reservation outcome, or the assigned Bead id, return `[BLOCKED]` instead of an informal summary. The orchestrator must not infer `[DONE]` from prose.
 
+## Aggregate-Fix Assignment
+
+When a worker is reassigned after aggregate validation fails, it is still executing the same assigned Bead. The parent must provide the mapped Bead id, original worker result, aggregate failing command and output, suspected files, reservation expectations, and success criteria.
+
+The worker must not broaden scope to unrelated failures. Reserve only the needed files, fix the mapped Bead root cause, run the Bead verification plus the aggregate failing command, release reservations, and return one final status.
+
 ## Post-Compaction Recovery
 
 Reread:

@@ -108,7 +108,7 @@ Orchestrator process:
 6. Tend worker results, reservations, and Bead graph until every worker returns `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
 7. After each worker result, update `.codexkit/state.json` and follow the continuation rules in `execute-references/batch-execution.md`.
 8. Run one aggregate `check.md` pass for routine work or `verify.md` for high-risk work only after worker-level verification is final.
-9. Map aggregate validation failures back to existing Beads and fix inside those Bead contexts.
+9. Map aggregate validation failures back to existing Beads in the locked batch scope. In Batch Execution, fix by spawning or reassigning a worker for the mapped Bead; the orchestrator does not implement the Bead fix directly.
 10. Ask the user before closing Beads or committing.
 
 Rules:
@@ -119,6 +119,8 @@ Rules:
 - Silence alone is not failure. Inspect graph, reservations, and worker status before interrupting.
 - Do not expand a batch from the whole `br ready` queue after execution starts. Newly ready work can be spawned only when it is inside the locked batch scope.
 - Invalid worker output is not success. Require a normalized result or mark the worker `[BLOCKED]` when verification or reservation evidence is missing.
+- Aggregate validation failures must not become hidden work outside Beads. Spawn or reassign a worker for the mapped Bead when the mapping is clear; block and ask the user when the failure is ambiguous or crosses scope.
+- The main thread may implement fixes only in Direct Execution, Assigned Bead Execution running in the main thread, or when the user explicitly overrides Batch Execution orchestration.
 
 ## Resume From Handoff
 

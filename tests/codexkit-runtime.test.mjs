@@ -187,6 +187,8 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(executeWorkflow, /Resume From Handoff.*before any other mode/);
   assert.match(executeWorkflow, /locked batch scope/);
   assert.match(executeWorkflow, /Invalid worker output is not success/);
+  assert.match(executeWorkflow, /spawning or reassigning a worker for the mapped Bead/);
+  assert.match(executeWorkflow, /must not become hidden work outside Beads/);
 
   const batchReference = fs.readFileSync(
     path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute-references", "batch-execution.md"),
@@ -196,7 +198,13 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(batchReference, /## Continuation Rules/);
   assert.match(batchReference, /assigned -> running -> done \| blocked \| handoff \| noop/);
   assert.match(batchReference, /Do not expand from the full `br ready` queue/);
+  assert.match(batchReference, /## Aggregate Failure Mapping/);
+  assert.match(batchReference, /## Fix Worker Reassignment/);
+  assert.match(batchReference, /## Orchestrator Rescue Boundaries/);
+  assert.match(batchReference, /spawn or reassign a worker for that mapped Bead/);
+  assert.match(batchReference, /does not implement Bead fixes/);
   assert.match(batchReference, /aggregate `check\.md` or `verify\.md` has run clean/);
+  assert.match(batchReference, /blocked with explicit unmapped reasons/);
 
   const handoffReference = fs.readFileSync(
     path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute-references", "handoff.md"),
@@ -204,7 +212,10 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   );
   assert.match(handoffReference, /Resume From Handoff takes precedence/);
   assert.match(handoffReference, /## Worker And Orchestrator Handoffs/);
+  assert.match(handoffReference, /## Required Handoff Fields/);
   assert.match(handoffReference, /stale or unsafe/);
+  assert.match(handoffReference, /handoff is incomplete/);
+  assert.match(handoffReference, /mark the path `\[BLOCKED\]`/);
   assert.match(handoffReference, /remove or archive `.codexkit\/HANDOFF\.json`/);
 
   const workerReference = fs.readFileSync(
@@ -214,6 +225,8 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(workerReference, /does not mean the Bead was closed or committed/);
   assert.match(workerReference, /## Invalid Or Incomplete Results/);
   assert.match(workerReference, /must not infer `\[DONE\]` from prose/);
+  assert.match(workerReference, /## Aggregate-Fix Assignment/);
+  assert.match(workerReference, /aggregate failing command and output/);
 
   const pluginSkill = fs.readFileSync(path.join(ROOT, "plugins", "codexkit", "skills", "codexkit", "SKILL.md"), "utf8");
   assert.match(pluginSkill, /`swarm`, `run ready beads`, `parallel beads` -> `execute`/);

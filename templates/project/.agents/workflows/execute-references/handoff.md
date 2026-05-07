@@ -57,6 +57,15 @@ Use `type: "worker"` when one assigned Bead pauses. It must include the Bead id,
 
 Use `type: "orchestrator"` for Batch Execution handoff. It must include locked batch scope, active workers, final worker results already received, active reservations, aggregate validation status, and batch-level next actions.
 
+## Required Handoff Fields
+
+A handoff is valid only when it includes enough state to resume safely:
+
+- worker handoff: task or Bead id, agent name, touched files, reserved files, done work, remaining work, resume commands, reservation state, and last updated time
+- orchestrator handoff: locked batch scope, active workers, completed worker results, blocked or noop Beads, active reservations, aggregate validation status, next action, and last updated time
+
+If required fields are missing, the handoff is incomplete.
+
 ## Reservation Policy
 
 Release reservations that are safe to release before returning `[HANDOFF]`.
@@ -89,6 +98,8 @@ On resume:
 7. Continue only if handoff, Bead state, reservations, and worktree agree.
 
 If they do not agree, treat the handoff as stale or unsafe and return `[BLOCKED]` with the mismatch and required parent/user action. Do not spawn replacement workers until the mismatch is resolved.
+
+If the handoff is incomplete, mark the path `[BLOCKED]`, keep reservations unchanged unless they are proven safe to release, and ask for the parent or user decision needed to resume manually, discard the handoff, or release and reassign.
 
 ## Cleanup
 
