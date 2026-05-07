@@ -19,7 +19,6 @@ const SKILL_DEFINITIONS = [
   ["behavioral-modes", "Planning & Routing", "Explicit working modes such as brainstorm, implement, debug, or review."],
   ["brainstorming", "Planning & Routing", "Clarify scope and generate options before implementation."],
   ["intelligent-routing", "Planning & Routing", "Choose the best specialist skills or subagents for a task."],
-  ["parallel-agents", "Planning & Routing", "Bounded delegation and parallel subagent coordination."],
   ["plan-writing", "Planning & Routing", "Written implementation plans, breakdowns, and checklists."],
   ["planning", "Planning & Routing", "Execution-ready planning with scope, risks, and acceptance criteria."],
   ["repo-onboarding", "Planning & Routing", "Fast map of an unfamiliar repository before making changes."],
