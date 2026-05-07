@@ -39,10 +39,10 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |   `-- workflows/
 |       |-- brainstorm.md
 |       |-- check.md
-|       |-- execute.md
 |       |-- debug.md
 |       |-- deploy.md
 |       |-- enhance.md
+|       |-- execute.md
 |       |-- plan.md
 |       |-- preview.md
 |       |-- review.md
@@ -51,12 +51,19 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |       |-- setup-agent-context.md
 |       |-- ship.md
 |       |-- status.md
-|       |-- swarm.md
 |       |-- test.md
 |       `-- verify.md
 |-- .codex/
 |   |-- config.toml
-|   |-- codexkit_bead_state.mjs
+|   |-- hooks.json
+|   |-- codexkit_dependencies.mjs
+|   |-- codexkit_reservations.mjs
+|   |-- codexkit_state.mjs
+|   |-- codexkit_status.mjs
+|   |-- hooks/
+|   |   |-- codexkit_pre_tool_use.mjs
+|   |   |-- codexkit_session_start.mjs
+|   |   `-- codexkit_stop.mjs
 |   `-- agents/
 |       |-- backend-specialist.toml
 |       |-- database-architect.toml
@@ -78,7 +85,9 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |   `-- beads.jsonl
 `-- .codexkit/
     |-- manifest.json
-    `-- bead-state.json
+    |-- state.json
+    |-- reservations.json
+    `-- HANDOFF.json
 ```
 
 ## Responsibilities
@@ -120,7 +129,7 @@ They define repeatable playbooks for common task types such as:
 - setup and onboarding
 - challenging and stress-testing plans
 - planning and creating Beads
-- executing normal work or one assigned Bead
+- executing direct work, one assigned Bead, or a batch of ready Beads
 - enhancing
 - debugging
 - reviewing
@@ -131,7 +140,6 @@ They define repeatable playbooks for common task types such as:
 - deploying
 - previewing
 - status reporting
-- swarming across multiple ready Beads
 - shipping
 
 Workflows should encode process, not domain knowledge.
@@ -141,12 +149,21 @@ Workflows should encode process, not domain knowledge.
 CodexKit treats Beads as the default issue tracker for scaffolded projects that need durable work items.
 
 - `plan.md` creates PRD, epic, feature, task, bug, docs, or question Beads with `br create`.
-- `execute.md` executes one assigned Bead or normal non-Bead implementation work.
-- `swarm.md` selects ready Beads with `br ready` and `bv --robot-triage`, assigns one Bead per worker, then runs one aggregate `check.md` or `verify.md` pass.
+- `execute.md` handles direct work, one assigned Bead, batch execution across ready Beads, and handoff resume.
 - `br sync --flush-only` exports Beads state; it does not run git commands.
 - Beads are not closed automatically. User approval is required before `br close`.
 
-The local helper `.codex/codexkit_bead_state.mjs` tracks same-session execution state in `.codexkit/bead-state.json`: active, deferred, completed, failed, awaiting user close, review cycles, and swarm validation cycles.
+### Runtime Guardrails
+
+CodexKit runtime helpers live in `.codex/` and write runtime state under `.codexkit/`.
+
+- `codexkit_state.mjs` manages `.codexkit/state.json` and `.codexkit/HANDOFF.json`.
+- `codexkit_reservations.mjs` manages `.codexkit/reservations.json` for local file reservations.
+- `codexkit_status.mjs` reports state, handoff, reservation, and dependency health without mutating files.
+- `codexkit_dependencies.mjs` checks skill-declared dependencies such as required commands.
+- `hooks/codexkit_pre_tool_use.mjs` blocks write-heavy shell commands that conflict with active reservations.
+
+Workers reserve files before writing and prefix write-heavy shell commands with `CODEXKIT_AGENT_NAME="<nickname>"`.
 
 ### Shared Packages
 
@@ -179,7 +196,7 @@ Each subagent should own a bounded role:
 - `devops_engineer` for CI, deploy, and operational changes
 - `test_writer` for focused test additions
 
-Subagents should be specialized enough that routing is predictable. Swarm workers receive one explicit Bead and the `execute.md` workflow; they do not choose their own Beads.
+Subagents should be specialized enough that routing is predictable. Execute workers receive one explicit Bead and do not choose their own work.
 
 ### MCP Configuration
 
@@ -202,7 +219,6 @@ The default scaffold includes a ready-to-use Context7 MCP entry and commented ex
 - Keep responsibilities separate: knowledge, process, execution, and work state should not be mixed casually.
 - Prefer a small core that teams can extend, instead of a large catalog with overlapping instructions.
 - Make risky behavior explicit and approval-gated.
-- Keep Bead ownership explicit: the main thread assigns, workers execute, reviewer checks, and the user approves closure.
 - Optimize for maintainability of the kit itself, not just first-run convenience.
 
 ## Extension Model

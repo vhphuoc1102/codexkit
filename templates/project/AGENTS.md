@@ -6,7 +6,8 @@ Use this repository guide as the first routing layer for Codex work.
 
 - Start by classifying the request: planning, implementation, debugging, review, release, or documentation.
 - Prefer the narrowest workflow that matches the task.
-- Use focused subagents for bounded work. Use `.agents/workflows/swarm.md` only when multiple ready Beads can be executed independently.
+- Use focused subagents for bounded work.
+- Use `.agents/workflows/execute.md` for direct execution, one assigned Bead, or batch execution across multiple ready Beads.
 - Load only the skills that materially improve the current task.
 - Do not run risky scripts or destructive commands without explicit user approval.
 - Use `check` before presenting a normal code change.
@@ -14,7 +15,7 @@ Use this repository guide as the first routing layer for Codex work.
 
 ## Routing
 
-When delegating to a subagent outside swarm execution, include the preferred skill set in the task handoff when it is clear from the domain. Swarm workers should receive one Bead, expected output, affected scope, and `execute.md`; do not pass explicit skill bundles by default.
+When delegating to a subagent, include the preferred skill set in the task handoff when it is clear from the domain. Execute workers receive one explicit Bead, expected output, affected scope, and `.agents/workflows/execute.md`; they do not choose their own Beads.
 
 ### Planning and Discovery
 
@@ -32,8 +33,7 @@ When delegating to a subagent outside swarm execution, include the preferred ski
 
 ### Implementation
 
-- Use `.agents/workflows/execute.md` for new features, structured code generation, or one assigned Bead such as `br-123`.
-- Use `.agents/workflows/swarm.md` for parallel execution of multiple ready Beads selected by the main thread with `br ready` or `bv --robot-triage`.
+- Use `.agents/workflows/execute.md` for new features, structured code work, one assigned Bead such as `br-123`, or batch execution of multiple ready Beads selected by the main thread with `br ready` or `bv --robot-triage`.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
 - Use `.agents/workflows/screen-spec.md` when an existing PRD or business logic needs to become screen inventory, screen flow, and UI states.
 - Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.

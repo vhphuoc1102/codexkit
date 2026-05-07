@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/codexkit_session_start.mjs",
+            "statusMessage": "CodexKit: session bootstrap"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/codexkit_pre_tool_use.mjs",
+            "statusMessage": "CodexKit: shell guardrails"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .codex/hooks/codexkit_stop.mjs",
+            "statusMessage": "CodexKit: end-of-turn check"
+          }
+        ]
+      }
+    ]
+  }
+}

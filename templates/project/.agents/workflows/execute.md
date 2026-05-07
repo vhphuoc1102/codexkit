@@ -1,84 +1,170 @@
 # Execute Workflow
 
-Use this workflow for normal implementation work or for executing one valid Bead. A Bead is optional; straightforward implementation requests can still use this workflow directly.
+Use this workflow for all implementation execution in CodexKit. It covers direct tasks, one assigned Bead, batch execution across multiple ready Beads, and resume from handoff. Batch execution is the swarm mode; there is no separate `swarm.md`.
 
-## Goal
+## Mode Selection
 
-Turn a concrete request or one Bead into a minimal, defensible implementation, then review the result before handoff.
+Choose exactly one mode:
 
-## Modes
+- **Resume From Handoff** when `.codexkit/HANDOFF.json` exists.
+- **Batch Execution** when the request is to run multiple ready Beads, run a swarm, or execute ready work in parallel.
+- **Assigned Bead Execution** when the request names exactly one Bead such as `br-123`.
+- **Direct Execution** when the request is concrete and does not use Beads.
 
-### Normal Execution
+If the requested work is vague, blocked, or missing acceptance criteria, stop and route to planning or ask for the smallest clarifying decision.
 
-Use this mode when the user asks for straightforward implementation without a Bead.
+## Direct Execution
 
-Entry criteria:
+Input:
 
-- requested behavior is specific enough to implement
-- product ambiguities are resolved or explicitly bounded
-- affected scope is understood from repository context
-
-Process:
-
-1. Inspect the current code, interfaces, and affected paths.
-2. Decide whether the work is direct execution or needs a plan checkpoint first.
-3. Implement in small, defensible increments.
-4. Keep unrelated files untouched unless they are required dependencies.
-5. Delegate final review to the `reviewer` subagent using `review.md`.
-6. Fix review findings and repeat review until clean or the review loop gate trips.
-7. Summarize changed behavior, review result, validation still needed, and remaining risks.
-
-### Bead Execution
-
-Use this mode when the request includes a Bead ID such as `br-123` or `123`.
-
-Entry criteria:
-
-1. Validate the Bead:
-   ```bash
-   br show <id>
-   ```
-2. Confirm the Bead is open, unblocked, and assigned to this execution pass.
-3. Read acceptance criteria, dependencies, and any parent epic context.
-4. Mark the Bead in progress when Beads is available:
-   ```bash
-   br update <id> --status=in_progress
-   ```
-5. Record the active Bead in the bead state manager when available:
-   ```bash
-   node .codex/codexkit_bead_state.mjs activate --bead br-123 --agent <agent-name>
-   ```
+- user request
+- repository context
+- affected paths discovered by inspection
 
 Process:
 
-1. Inspect the code paths needed for this Bead.
-2. Implement only the work required by the Bead acceptance criteria.
-3. Keep the Bead ID in worker summaries and commit messages when commits are requested.
-4. Delegate final review to the `reviewer` subagent using `review.md`.
-5. Fix reviewer or user review feedback inside the same Bead.
-6. Repeat fix-review until clean or the loop gate trips.
-7. Mark the Bead implementation-complete in the local state manager, but do not close it automatically.
+1. Inspect real code and interfaces before editing.
+2. Bound the scope and identify the smallest relevant validation.
+3. Implement in small increments.
+4. Run `check.md` validation before handoff.
+5. Summarize changed behavior, validation, skipped checks, and residual risk.
+
+## Assigned Bead Execution
+
+Input:
+
+- one explicit `assigned_bead_id`
+- optional parent-provided affected scope and expected output
+- Codex nickname when running as a worker
+
+Required setup:
+
+```bash
+node .codex/codexkit_status.mjs --json
+br show <assigned-bead-id>
+node .codex/codexkit_reservations.mjs list --active-only --json
+```
+
+Process:
+
+1. Require exactly one assigned Bead. Workers never choose work with `br ready`, `br list`, or `bv`.
+2. Confirm the Bead is open, unblocked, and has concrete acceptance and verification criteria.
+3. Reserve every file or glob before writing:
    ```bash
-   node .codex/codexkit_bead_state.mjs complete --bead br-123
-   node .codex/codexkit_bead_state.mjs await-close --bead br-123
+   node .codex/codexkit_reservations.mjs reserve --agent "<codex-nickname>" --bead "<id>" --path "src/foo.ts" --ttl 3600 --json
    ```
-8. Ask the user whether to close the Bead.
-9. Close only after acceptance criteria pass, review has no blocking findings, and the user approves:
+4. Prefix write-heavy shell commands with:
    ```bash
-   br close <id> --reason "Completed"
-   br sync --flush-only
+   CODEXKIT_AGENT_NAME="<codex-nickname>" <command>
    ```
+5. Implement only the assigned Bead.
+6. Run the Bead's verification. Fix root causes and rerun.
+7. After two serious failed verification attempts, return `[BLOCKED]`.
+8. Release reservations before returning:
+   ```bash
+   node .codex/codexkit_reservations.mjs release --agent "<codex-nickname>" --bead "<id>" --json
+   ```
+9. Return one status: `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
 
-## Review Loop Gate
+Do not auto-close Beads and do not auto-commit. After verification passes, return `[DONE]`; the main thread asks the user before `br close` or commit.
 
-- Maximum 10 fix-review cycles per execution pass.
-- When the limit is reached or progress stalls, stop and report `[BLOCKED] br-###` with current findings and suggested next action.
-- Do not create automatic fix Beads during execute. Fix review feedback inside the current Bead unless the user asks otherwise.
+## Batch Execution
 
-## Rules
+Use Batch Execution for multiple independent ready Beads.
 
-- Execute at most one Bead per run.
-- Workers do not pick their own Beads; the parent thread or swarm assigns them.
-- Do not run `check.md` or `verify.md` as part of normal Bead execution. Swarm handles final check/verify at the aggregate level.
-- Do not close a Bead without explicit user approval.
-- Do not broaden scope without telling the user.
+Orchestrator process:
+
+1. Run:
+   ```bash
+   br ready
+   bv --robot-triage
+   node .codex/codexkit_reservations.mjs sweep --json
+   node .codex/codexkit_status.mjs --json
+   ```
+2. Select a bounded batch of independent ready Beads.
+3. Record active Beads and workers in `.codexkit/state.json`.
+4. Spawn one bounded worker per Bead.
+5. Give each worker:
+   - Codex nickname
+   - agent id
+   - exactly one `assigned_bead_id`
+   - affected scope
+   - expected output
+   - this `execute.md` workflow
+6. Tend worker results, reservations, and Bead graph until every worker returns `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
+7. Run one aggregate `check.md` pass for routine work or `verify.md` for high-risk work.
+8. Map validation failures back to existing Beads and fix inside those Bead contexts.
+9. Ask the user before closing Beads or committing.
+
+Rules:
+
+- The orchestrator does not implement Beads directly.
+- Workers never choose their own Beads.
+- Do not resolve file conflicts by telling workers to be careful. Change reservations, Bead scope, or worker assignment.
+- Silence alone is not failure. Inspect graph, reservations, and worker status before interrupting.
+
+## Resume From Handoff
+
+When `.codexkit/HANDOFF.json` exists:
+
+1. Read `AGENTS.md`.
+2. Run:
+   ```bash
+   node .codex/codexkit_status.mjs --json
+   ```
+3. Read `.codexkit/HANDOFF.json` and `.codexkit/state.json`.
+4. Reopen the current Bead or task.
+5. Check active reservations and `git status`.
+6. Continue only if the handoff, worktree, Bead state, and reservations agree.
+7. When the resumed work reaches a final state, remove or archive the handoff so future sessions do not resume stale context.
+
+If resume is unsafe or ambiguous, return `[BLOCKED]` with the concrete mismatch and required next action.
+
+## Worker Contract
+
+Workers are short-lived. A worker owns one assigned Bead and returns exactly one final status.
+
+Minimum worker output:
+
+```text
+[DONE] br-123: <summary>
+Codex nickname: <name>
+Files modified: <paths>
+Reservations: reserved <paths>; released <yes/no>
+Verification: <command/result>
+Next action: <close/commit/user review/none>
+```
+
+For blocked work:
+
+```text
+[BLOCKED] br-123 - <summary>
+Requested files: <paths>
+Blocker: <conflict/failing condition/missing decision>
+What happened: <description>
+What I need next: <specific parent or user action>
+```
+
+## Reservation Contract
+
+- Reserve before writing.
+- Keep reservations as narrow as possible.
+- Use TTLs for long-running worker reservations.
+- Release reservations on `[DONE]`, `[NOOP]`, and safe `[BLOCKED]`.
+- On `[HANDOFF]`, release safe reservations and list any intentionally retained reservations in `.codexkit/HANDOFF.json`.
+
+## Result Statuses
+
+- `[DONE]`: assigned work is implemented, verification passed, and reservations are released.
+- `[BLOCKED]`: the worker cannot continue safely without a parent/user action.
+- `[HANDOFF]`: work is paused with `.codexkit/HANDOFF.json` written for resume.
+- `[NOOP]`: assigned work is no longer actionable or was assigned incorrectly.
+
+## Close And Commit Policy
+
+Workers do not close Beads or commit automatically. The main thread closes or commits only after:
+
+- verification has passed
+- aggregate check/verify is clean for batch execution
+- no blocking review findings remain
+- the user explicitly approves close or commit

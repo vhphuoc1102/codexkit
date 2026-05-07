@@ -43,8 +43,8 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
   - `grill`, `grill me`, `grill-with-docs` -> `grill-with-docs`
   - `to-prd`, `create PRD`, `turn this into PRD` -> `plan`
   - `to-issues`, `turn plan into issues`, `create issues`, `create beads` -> `plan`
-  - `execute bead`, `work on bead`, `work on br-###` -> `execute`
-  - `swarm`, `run ready beads`, `parallel beads` -> `swarm`
+  - `execute`, `execute bead`, `work on bead`, `work on br-###` -> `execute`
+  - `swarm`, `run ready beads`, `parallel beads` -> `execute`
   - `review workflow` -> `review`
   - `ship workflow` -> `ship`
 - If the user asks to use a workflow from CodexKit and the repository is not scaffolded yet, explain that the workflow lives in the project scaffold and suggest `npx @vhphuoc1102/codexkit init` or `npx @vhphuoc1102/codexkit install`.
@@ -65,7 +65,7 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - If the user asks for initial full setup in the current repository, run `npx @vhphuoc1102/codexkit setup-codex`.
 - If the user asks to use a CodexKit workflow in the current repository, first check whether `.agents/workflows/<name>.md` exists in the workspace and then follow that workflow locally.
 - If the user asks for a workflow by an alias such as `prd to screens`, map it to the canonical file name `screen-spec`.
-- If the user asks for Beads planning, map it to `plan`; if they ask to execute one Bead, map it to `execute`; if they ask to run multiple ready Beads in parallel, map it to `swarm`.
+- If the user asks for Beads planning, map it to `plan`; if they ask to execute one Bead or run multiple ready Beads in parallel, map it to `execute`.
 - If the repository has CodexKit scaffolding and the workflow file exists, do not search npm, package cache, or remote docs first.
 - If the workflow file does not exist, explain that the repository is missing the scaffolded workflow and then suggest the smallest relevant scaffold command.
 
@@ -85,8 +85,9 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 - `create beads from this PRD` -> resolve to `.agents/workflows/plan.md` in the current repository and create Beads or Markdown bead drafts
 - `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the PRD output path
 - `use the plan workflow from CodexKit` -> resolve to `.agents/workflows/plan.md` in the current repository and follow it directly
-- `execute br-123` -> resolve to `.agents/workflows/execute.md` in the current repository and execute that assigned Bead
-- `run ready beads in parallel` -> resolve to `.agents/workflows/swarm.md` in the current repository and assign ready Beads through the swarm workflow
+- `execute br-123` -> resolve to `.agents/workflows/execute.md` in the current repository and use Assigned Bead Execution
+- `run ready beads in parallel` -> resolve to `.agents/workflows/execute.md` in the current repository and use Batch Execution
+- `swarm` -> resolve to `.agents/workflows/execute.md`; CodexKit ships swarm as a mode inside execute, not as `swarm.md`
 - `follow the review workflow in this repo` -> use `.agents/workflows/review.md` from the workspace, not the npm package
 - The shipped MCP bundle currently includes `context7` and a commented `mysql` example using `@benborla29/mcp-server-mysql`.
 

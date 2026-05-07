@@ -3,6 +3,25 @@ model_reasoning_summary = "auto"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
+# CodexKit: compact recovery prompt
+compact_prompt = """
+MANDATORY: CodexKit context compaction recovery.
+
+STOP. Before doing anything else:
+1. Read AGENTS.md completely.
+2. If present, run node .codex/codexkit_status.mjs --json.
+3. If present, read .codexkit/HANDOFF.json and .codexkit/state.json.
+4. Re-open the current Bead or task before running implementation commands.
+5. Check active reservations before writing:
+   node .codex/codexkit_reservations.mjs list --active-only --json
+6. Check the current worktree state with git status before resuming.
+
+After completing these steps, briefly confirm what context you restored and only then continue.
+"""
+
+[features]
+codex_hooks = true
+
 [agents]
 max_threads = 6
 max_depth = 1

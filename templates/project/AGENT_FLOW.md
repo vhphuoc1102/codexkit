@@ -41,7 +41,7 @@ Once the primary mode is clear, route to the narrowest workflow:
 | existing PRD or business logic to screen architecture | `screen-spec.md` |
 | UI or UX design direction work | `impeccable.md` |
 | implement an existing Figma design in code | `figma-to-code.md` |
-| new feature, structured code work, or one assigned Bead | `execute.md` |
+| clear implementation task, one assigned Bead, or multiple ready Beads | `execute.md` |
 | iterative change to an existing feature | `enhance.md` |
 | bug or regression investigation | `debug.md` |
 | review or audit request | `review.md` |
@@ -51,7 +51,6 @@ Once the primary mode is clear, route to the narrowest workflow:
 | quick validation | `check.md` |
 | deeper release validation | `verify.md` |
 | deployment preparation or execution | `deploy.md` |
-| parallel execution of multiple ready Beads | `swarm.md` |
 | release or handoff summary | `ship.md` |
 
 The workflow gives the process skeleton for the task.
@@ -94,7 +93,7 @@ Use a subagent only when it sharpens the role:
 | external docs verification | `docs_researcher` |
 | focused test authoring | `test_writer` |
 
-Subagents should stay bounded. Avoid unnecessary parallelism.
+Subagents should stay bounded. Use `execute.md` Batch Execution when multiple ready Beads genuinely benefit from parallel workers.
 
 ## 5. Execution Rules
 
