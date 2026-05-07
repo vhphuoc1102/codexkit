@@ -13,6 +13,8 @@ Write handoff when:
 
 Return `[HANDOFF]` after writing the file.
 
+If `.codexkit/HANDOFF.json` already exists at workflow start, Resume From Handoff takes precedence over direct, assigned Bead, and batch execution. Do not start new execution until the handoff is read, reconciled, cleared, or explicitly blocked.
+
 ## Handoff Shape
 
 Use this minimum shape:
@@ -49,7 +51,11 @@ Use this minimum shape:
 }
 ```
 
-Use `type: "orchestrator"` for Batch Execution handoff. Include active workers and batch-level next actions when the orchestrator pauses.
+## Worker And Orchestrator Handoffs
+
+Use `type: "worker"` when one assigned Bead pauses. It must include the Bead id, agent name, touched files, retained reservations, done work, remaining work, and resume commands.
+
+Use `type: "orchestrator"` for Batch Execution handoff. It must include locked batch scope, active workers, final worker results already received, active reservations, aggregate validation status, and batch-level next actions.
 
 ## Reservation Policy
 
@@ -82,8 +88,8 @@ On resume:
 6. Check `git status`.
 7. Continue only if handoff, Bead state, reservations, and worktree agree.
 
-If they do not agree, return `[BLOCKED]` with the mismatch and required parent/user action.
+If they do not agree, treat the handoff as stale or unsafe and return `[BLOCKED]` with the mismatch and required parent/user action. Do not spawn replacement workers until the mismatch is resolved.
 
 ## Cleanup
 
-When resumed work reaches `[DONE]`, `[BLOCKED]`, or `[NOOP]`, remove or archive `.codexkit/HANDOFF.json` so future sessions do not resume stale state.
+When resumed work reaches `[DONE]`, `[BLOCKED]`, or `[NOOP]`, remove or archive `.codexkit/HANDOFF.json` so future sessions do not resume stale state. If the resumed work returns another `[HANDOFF]`, rewrite the file with the new state rather than leaving old resume instructions in place.

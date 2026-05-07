@@ -184,6 +184,36 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(executeWorkflow, /execute-references\/worker-details\.md/);
   assert.match(executeWorkflow, /execute-references\/batch-execution\.md/);
   assert.match(executeWorkflow, /execute-references\/handoff\.md/);
+  assert.match(executeWorkflow, /Resume From Handoff.*before any other mode/);
+  assert.match(executeWorkflow, /locked batch scope/);
+  assert.match(executeWorkflow, /Invalid worker output is not success/);
+
+  const batchReference = fs.readFileSync(
+    path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute-references", "batch-execution.md"),
+    "utf8",
+  );
+  assert.match(batchReference, /## Batch Scope Contract/);
+  assert.match(batchReference, /## Continuation Rules/);
+  assert.match(batchReference, /assigned -> running -> done \| blocked \| handoff \| noop/);
+  assert.match(batchReference, /Do not expand from the full `br ready` queue/);
+  assert.match(batchReference, /aggregate `check\.md` or `verify\.md` has run clean/);
+
+  const handoffReference = fs.readFileSync(
+    path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute-references", "handoff.md"),
+    "utf8",
+  );
+  assert.match(handoffReference, /Resume From Handoff takes precedence/);
+  assert.match(handoffReference, /## Worker And Orchestrator Handoffs/);
+  assert.match(handoffReference, /stale or unsafe/);
+  assert.match(handoffReference, /remove or archive `.codexkit\/HANDOFF\.json`/);
+
+  const workerReference = fs.readFileSync(
+    path.join(TEMPLATE_ROOT, ".agents", "workflows", "execute-references", "worker-details.md"),
+    "utf8",
+  );
+  assert.match(workerReference, /does not mean the Bead was closed or committed/);
+  assert.match(workerReference, /## Invalid Or Incomplete Results/);
+  assert.match(workerReference, /must not infer `\[DONE\]` from prose/);
 
   const pluginSkill = fs.readFileSync(path.join(ROOT, "plugins", "codexkit", "skills", "codexkit", "SKILL.md"), "utf8");
   assert.match(pluginSkill, /`swarm`, `run ready beads`, `parallel beads` -> `execute`/);

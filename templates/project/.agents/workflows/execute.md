@@ -4,7 +4,7 @@ Use this workflow for all implementation execution in CodexKit. It covers direct
 
 ## Mode Selection
 
-Choose exactly one mode:
+Choose exactly one mode. If `.codexkit/HANDOFF.json` exists, choose **Resume From Handoff** before any other mode.
 
 - **Resume From Handoff** when `.codexkit/HANDOFF.json` exists.
 - **Batch Execution** when the request is to run multiple ready Beads, run a swarm, or execute ready work in parallel.
@@ -95,8 +95,8 @@ Orchestrator process:
    node .codex/codexkit_reservations.mjs sweep --json
    node .codex/codexkit_status.mjs --json
    ```
-2. Select a bounded batch of independent ready Beads.
-3. Record active Beads and workers in `.codexkit/state.json`.
+2. Select and lock a bounded batch scope of independent ready Beads before spawning workers.
+3. Record active Beads, active workers, locked batch scope, and worker status in `.codexkit/state.json`.
 4. Spawn one bounded worker per Bead.
 5. Give each worker:
    - Codex nickname
@@ -106,9 +106,10 @@ Orchestrator process:
    - expected output
    - this `execute.md` workflow
 6. Tend worker results, reservations, and Bead graph until every worker returns `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
-7. Run one aggregate `check.md` pass for routine work or `verify.md` for high-risk work.
-8. Map validation failures back to existing Beads and fix inside those Bead contexts.
-9. Ask the user before closing Beads or committing.
+7. After each worker result, update `.codexkit/state.json` and follow the continuation rules in `execute-references/batch-execution.md`.
+8. Run one aggregate `check.md` pass for routine work or `verify.md` for high-risk work only after worker-level verification is final.
+9. Map aggregate validation failures back to existing Beads and fix inside those Bead contexts.
+10. Ask the user before closing Beads or committing.
 
 Rules:
 
@@ -116,12 +117,14 @@ Rules:
 - Workers never choose their own Beads.
 - Do not resolve file conflicts by telling workers to be careful. Change reservations, Bead scope, or worker assignment.
 - Silence alone is not failure. Inspect graph, reservations, and worker status before interrupting.
+- Do not expand a batch from the whole `br ready` queue after execution starts. Newly ready work can be spawned only when it is inside the locked batch scope.
+- Invalid worker output is not success. Require a normalized result or mark the worker `[BLOCKED]` when verification or reservation evidence is missing.
 
 ## Resume From Handoff
 
 Load `.agents/workflows/execute-references/handoff.md` before writing, reading, or clearing `.codexkit/HANDOFF.json`.
 
-When `.codexkit/HANDOFF.json` exists:
+When `.codexkit/HANDOFF.json` exists, resume handling takes precedence over direct, assigned Bead, and batch modes:
 
 1. Read `AGENTS.md`.
 2. Run:

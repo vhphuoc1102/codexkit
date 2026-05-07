@@ -62,7 +62,7 @@ Run the Bead's verification exactly. Fix the root cause and rerun the failing co
 
 ## Result Fields
 
-`[DONE]` means implementation is complete, verification passed, and reservations were released. It does not mean the Bead was closed or committed.
+`[DONE]` means implementation is complete, Bead-level verification passed, and reservations were released. It does not mean the Bead was closed or committed; only the main thread may close or commit after aggregate validation and user approval.
 
 Minimum fields:
 
@@ -110,6 +110,12 @@ Resume: read .codexkit/HANDOFF.json, br show <id>, reservation list
 Reason: <assignment unavailable, already closed, unsafe, or out of scope>
 Suggested next action: <triage, clear blocker, or respawn later>
 ```
+
+## Invalid Or Incomplete Results
+
+The final worker message must start with exactly one status: `[DONE]`, `[BLOCKED]`, `[HANDOFF]`, or `[NOOP]`.
+
+If the worker cannot provide verification evidence, reservation outcome, or the assigned Bead id, return `[BLOCKED]` instead of an informal summary. The orchestrator must not infer `[DONE]` from prose.
 
 ## Post-Compaction Recovery
 
