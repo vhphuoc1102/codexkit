@@ -11,7 +11,7 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 
 - `npx @vhphuoc1102/codexkit init` or `npx @vhphuoc1102/codexkit install` to initialize the scaffold in the current repository.
 - `npx @vhphuoc1102/codexkit update` to refresh managed files from the shipped template.
-- `npx @vhphuoc1102/codexkit install --target plugin` to install only the workspace plugin into the current project.
+- `npx @vhphuoc1102/codexkit install --target plugin` to install only the workspace plugin into the target project.
 - `npx @vhphuoc1102/codexkit install --target mcp` to install the shipped MCP bundle into the current project's `.codex/config.toml`.
 - `npx @vhphuoc1102/codexkit install --target skills` to install only the shipped project skill bundle into the current project.
 - `npx @vhphuoc1102/codexkit install --target mcp --scope local` to install the shipped MCP bundle into `${CODEX_HOME:-~/.codex}/config.toml`.
@@ -71,23 +71,23 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 
 ## Natural Language Examples
 
-- `liệt kê skills debug` -> `npx @vhphuoc1102/codexkit list --target skills --query debug`
-- `cài skill impeccable` -> `npx @vhphuoc1102/codexkit install --target skills --scope local --skills impeccable`
-- `cài skill frontend` -> search first, then suggest exact matches such as `impeccable`, `nextjs-react-expert`, or `tailwind-patterns`
-- `gỡ skill frontend-design cũ` -> `npx @vhphuoc1102/codexkit remove --target skills --scope local --skills frontend-design,web-design-guidelines`
-- `xem local codex đã cài skill gì` -> `npx @vhphuoc1102/codexkit list --target skills --scope local`
-- `đồng bộ lại plugin và skills` -> `npx @vhphuoc1102/codexkit sync-codex`
-- `dùng workflow impeccable của CodexKit` -> resolve to `.agents/workflows/impeccable.md` in the current repository and follow that workflow
+- `list debug skills` -> `npx @vhphuoc1102/codexkit list --target skills --query debug`
+- `install the impeccable skill` -> `npx @vhphuoc1102/codexkit install --target skills --scope local --skills impeccable`
+- `install frontend skills` -> search first, then suggest exact matches such as `impeccable`, `nextjs-react-expert`, or `tailwind-patterns`
+- `remove the old frontend design skills` -> `npx @vhphuoc1102/codexkit remove --target skills --scope local --skills frontend-design,web-design-guidelines`
+- `show installed local codex skills` -> `npx @vhphuoc1102/codexkit list --target skills --scope local`
+- `sync the plugin and skills again` -> `npx @vhphuoc1102/codexkit sync-codex`
+- `use the CodexKit impeccable workflow` -> resolve to `.agents/workflows/impeccable.md` in the current repository and follow that workflow
 - `prd to screens` -> resolve to `.agents/workflows/screen-spec.md` in the current repository and follow that workflow
 - `business logic to screens` -> resolve to `.agents/workflows/screen-spec.md` in the current repository and follow that workflow
-- `grill kế hoạch này` -> resolve to `.agents/workflows/grill-with-docs.md` in the current repository and follow that workflow
-- `setup issue tracker cho repo này` -> resolve to `.agents/workflows/setup-agent-context.md` in the current repository and follow that workflow
+- `grill this plan` -> resolve to `.agents/workflows/grill-with-docs.md` in the current repository and follow that workflow
+- `set up the issue tracker for this repo` -> resolve to `.agents/workflows/setup-agent-context.md` in the current repository and follow that workflow
 - `turn this plan into issues` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the Beads output path
 - `create beads from this PRD` -> resolve to `.agents/workflows/plan.md` in the current repository and create Beads or Markdown bead drafts
 - `create PRD from this context` -> resolve to `.agents/workflows/plan.md` in the current repository and follow the PRD output path
 - `use the plan workflow from CodexKit` -> resolve to `.agents/workflows/plan.md` in the current repository and follow it directly
 - `execute br-123` -> resolve to `.agents/workflows/execute.md` in the current repository and use Assigned Bead Execution
-- `run ready beads in parallel` -> resolve to `.agents/workflows/execute.md` in the current repository and use Batch Execution
+- `run ready beads in parallel` -> resolve to `.agents/workflows/execute.md` and use Batch Execution
 - `swarm` -> resolve to `.agents/workflows/execute.md`; CodexKit ships swarm as a mode inside execute, not as `swarm.md`
 - `follow the review workflow in this repo` -> use `.agents/workflows/review.md` from the workspace, not the npm package
 - The shipped MCP bundle currently includes `context7` and a commented `mysql` example using `@benborla29/mcp-server-mysql`.
