@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.12] - 2026-05-08
+
+Release: [v0.1.12](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.12)
+
+### Fixed
+
+- Updated the CodexKit `SessionStart` hook to emit Codex session-start specific JSON under `hookSpecificOutput`.
+
 ## [v0.1.11] - 2026-05-08
 
 Release: [v0.1.11](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.11)

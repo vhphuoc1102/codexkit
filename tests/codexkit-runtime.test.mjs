@@ -23,6 +23,7 @@ import {
 const ROOT = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
 const TEMPLATE_ROOT = path.join(ROOT, "templates", "project");
 const PRE_TOOL_HOOK = path.join(TEMPLATE_ROOT, ".codex", "hooks", "codexkit_pre_tool_use.mjs");
+const SESSION_START_HOOK = path.join(TEMPLATE_ROOT, ".codex", "hooks", "codexkit_session_start.mjs");
 const STATUS_SCRIPT = path.join(TEMPLATE_ROOT, ".codex", "codexkit_status.mjs");
 
 function makeRepo() {
@@ -34,6 +35,16 @@ function makeRepo() {
 
 function runPreToolHook(repoRoot, payload) {
   const result = spawnSync(process.execPath, [PRE_TOOL_HOOK], {
+    cwd: repoRoot,
+    input: JSON.stringify(payload),
+    encoding: "utf8",
+  });
+  assert.equal(result.status, 0, result.stderr);
+  return JSON.parse(result.stdout);
+}
+
+function runSessionStartHook(repoRoot, payload = { cwd: repoRoot }) {
+  const result = spawnSync(process.execPath, [SESSION_START_HOOK], {
     cwd: repoRoot,
     input: JSON.stringify(payload),
     encoding: "utf8",
@@ -136,6 +147,16 @@ test("pre-tool hook blocks conflicting write-heavy shell commands", () => {
   });
   assert.equal(warned.continue, true);
   assert.match(warned.systemMessage, /CODEXKIT_AGENT_NAME/);
+});
+
+test("session-start hook emits Codex SessionStart-specific JSON", () => {
+  const repoRoot = makeRepo();
+  const output = runSessionStartHook(repoRoot);
+
+  assert.deepEqual(Object.keys(output), ["hookSpecificOutput"]);
+  assert.equal(output.hookSpecificOutput.hookEventName, "SessionStart");
+  assert.match(output.hookSpecificOutput.additionalContext, /CodexKit runtime is installed/);
+  assert.match(output.hookSpecificOutput.additionalContext, /Repo:/);
 });
 
 test("status helper reports state, handoff, and reservation health without mutation", () => {

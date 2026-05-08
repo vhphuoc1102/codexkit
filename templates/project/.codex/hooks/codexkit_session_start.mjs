@@ -32,14 +32,25 @@ export async function main() {
   }
 
   const output = {
-    continue: true,
-    systemMessage: notes.join(" ") || "CodexKit session bootstrap complete.",
-    context: renderCodexKitStatus(status),
+    hookSpecificOutput: {
+      hookEventName: "SessionStart",
+      additionalContext: `${notes.join(" ") || "CodexKit session bootstrap complete."}\n\n${renderCodexKitStatus(status)}`,
+    },
   };
   process.stdout.write(JSON.stringify(output));
   return 0;
 }
 
-if (process.argv[1]) {
+function isDirectExecution() {
+  if (!process.argv[1]) return false;
+  const selfPath = fileURLToPath(import.meta.url);
+  try {
+    return path.resolve(fs.realpathSync.native(process.argv[1])) === path.resolve(fs.realpathSync.native(selfPath));
+  } catch {
+    return path.resolve(process.argv[1]) === selfPath;
+  }
+}
+
+if (isDirectExecution()) {
   process.exitCode = await main();
 }
