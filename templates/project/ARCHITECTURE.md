@@ -50,8 +50,6 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |       |-- preview.md
 |       |-- review.md
 |       |-- impeccable.md
-|       |-- screen-spec-references/
-|       |   `-- output-template.md
 |       |-- screen-spec.md
 |       |-- setup-agent-context.md
 |       |-- ship.md

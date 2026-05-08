@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.16] - 2026-05-08
+
+Release: [v0.1.16](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.16)
+
+### Changed
+
+- Reverted the expanded `screen-spec` workflow back to the simpler `v0.1.13` behavior after field testing showed the new traceability workflow was not a good fit.
+- Removed the `screen-spec-references/output-template.md` artifact and related routing/test expectations introduced by the reverted workflow.
+
 ## [v0.1.13] - 2026-05-08
 
 Release: [v0.1.13](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.13)
