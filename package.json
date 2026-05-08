@@ -1,6 +1,6 @@
 {
   "name": "@vhphuoc1102/codexkit",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "CodexKit with reusable skills, subagents, workflows, and a project scaffold CLI.",
   "type": "module",
   "publishConfig": {

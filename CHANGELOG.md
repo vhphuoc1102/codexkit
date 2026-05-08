@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.11] - 2026-05-08
+
+Release: [v0.1.11](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.11)
+
+### Improved
+
+- Updated the vendored Impeccable project skill to include the latest upstream `main` live-mode fixes after `skill-v3.0.7`.
+
 ## [v0.1.10] - 2026-05-08
 
 Release: [v0.1.10](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.10)
