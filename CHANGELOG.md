@@ -2,7 +2,9 @@
 
 All notable changes to this project are documented here.
 
-## Unreleased
+## [v0.1.13] - 2026-05-08
+
+Release: [v0.1.13](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.13)
 
 ### Changed
 
