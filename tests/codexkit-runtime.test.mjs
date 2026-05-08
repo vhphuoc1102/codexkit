@@ -328,6 +328,18 @@ test("screen spec workflow creates traceable business-to-screen artifacts", () =
   assert.match(template, /## Open Questions/);
   assert.match(template, /## Next Steps/);
   assert.match(template, /\$impeccable shape/);
+
+  const agentsGuide = fs.readFileSync(path.join(TEMPLATE_ROOT, "AGENTS.md"), "utf8");
+  assert.match(agentsGuide, /docs\/screen-specs\/<feature-slug>\.md/);
+  assert.match(agentsGuide, /screens, requirements, forms, fields, tables, columns, interactions, states, and business-rule mappings/);
+
+  const agentFlow = fs.readFileSync(path.join(TEMPLATE_ROOT, "AGENT_FLOW.md"), "utf8");
+  assert.match(agentFlow, /existing PRD, business logic, `CONTEXT\.md`, or ADRs to traceable screen architecture/);
+  assert.match(agentFlow, /consume the `screen-spec\.md` artifact/);
+
+  const architecture = fs.readFileSync(path.join(TEMPLATE_ROOT, "ARCHITECTURE.md"), "utf8");
+  assert.match(architecture, /screen-spec-references\//);
+  assert.match(architecture, /output-template\.md/);
 });
 
 test("frontend UI routing uses impeccable instead of retired frontend skills", async () => {

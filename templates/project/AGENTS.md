@@ -35,7 +35,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
 
 - Use `.agents/workflows/execute.md` for new features, structured code work, one assigned Bead such as `br-123`, or batch execution of multiple ready Beads selected by the main thread with `br ready` or `bv --robot-triage`.
 - Use `.agents/workflows/enhance.md` for iterative work inside an existing codebase.
-- Use `.agents/workflows/screen-spec.md` when an existing PRD or business logic needs to become screen inventory, screen flow, and UI states.
+- Use `.agents/workflows/screen-spec.md` when an existing PRD, business logic, `CONTEXT.md`, or ADRs need to become a traceable screen architecture artifact at `docs/screen-specs/<feature-slug>.md`.
 - Use `.agents/workflows/impeccable.md` when the primary task is UI direction, redesign, UX shaping, critique, audit, or polish.
 - Use `.agents/workflows/figma-to-code.md` when the task is to implement an existing Figma frame or flow into the current codebase.
 - Prefer the `implementer` subagent for scoped code changes after the task is clear.
@@ -53,7 +53,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
 Use Impeccable as the primary UI/UX skill, but select the specific command instead of invoking it generically:
 
 - No project UI context: `$impeccable teach`; use `$impeccable document` when a visual design system needs to be captured.
-- PRD, business rules, or multi-screen UX: `.agents/workflows/screen-spec.md`, then `$impeccable shape`.
+- PRD, business rules, or multi-screen UX: `.agents/workflows/screen-spec.md` first to lock screens, requirements, forms, fields, tables, columns, interactions, states, and business-rule mappings; then `$impeccable shape`.
 - New UI implementation: `$impeccable shape`, wait for explicit brief confirmation, then `$impeccable craft`.
 - Existing UI design review: `$impeccable critique`.
 - Accessibility, responsive, theming, UI performance, or technical UI checks: `$impeccable audit`.

@@ -38,7 +38,7 @@ Once the primary mode is clear, route to the narrowest workflow:
 | vague feature or strategy request | `brainstorm.md` |
 | challenge, grill, or stress-test an idea/plan/spec | `grill-with-docs.md` |
 | implementation plan, PRD/product spec creation, Beads creation, or issue breakdown | `plan.md` |
-| existing PRD or business logic to screen architecture | `screen-spec.md` |
+| existing PRD, business logic, `CONTEXT.md`, or ADRs to traceable screen architecture | `screen-spec.md` |
 | UI or UX design direction work | `impeccable.md` |
 | implement an existing Figma design in code | `figma-to-code.md` |
 | clear implementation task, one assigned Bead, or multiple ready Beads | `execute.md` |
@@ -83,7 +83,7 @@ For Impeccable, choose a command that matches the work:
 
 - `$impeccable teach` when PRODUCT.md or project design context is missing
 - `$impeccable document` to capture an existing visual system into DESIGN.md
-- `$impeccable shape` before implementation when UX/UI direction is not confirmed
+- `$impeccable shape` before implementation when UX/UI direction is not confirmed; for business-driven multi-screen work, consume the `screen-spec.md` artifact after it locks screens, forms, tables, interactions, states, and requirement mappings
 - `$impeccable craft` only after a confirmed shape brief
 - `$impeccable critique` for UX/design review
 - `$impeccable audit` for accessibility, responsive, theming, UI performance, and anti-pattern checks
