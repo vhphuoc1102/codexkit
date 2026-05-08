@@ -41,7 +41,7 @@ npx @vhphuoc1102/codexkit init --path ./my-project
 ## What You Get
 
 - root routing docs: `AGENTS.md`, `ARCHITECTURE.md`, `AGENT_FLOW.md`
-- 49 shipped skills in `.agents/skills`
+- 46 shipped skills in `.agents/skills`
 - 19 workflow playbooks in `.agents/workflows`
 - 16 focused subagents in `.codex/agents`
 - Impeccable UI/UX skill and workflow for design work

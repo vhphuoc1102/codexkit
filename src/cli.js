@@ -645,9 +645,12 @@ export async function runCli(argv) {
     if (!operation.quiet) {
       console.log(
         operation.dryRun
-          ? `Project scope: planned ${result.written.length} project skill file syncs in ${operation.path}`
+          ? `Project scope: planned ${result.written.length} project skill file syncs and ${result.deleted.length} obsolete skill removals in ${operation.path}`
           : `Project scope: synced CodexKit project skills in ${operation.path}`
       );
+      if (!operation.dryRun && result.deleted.length > 0) {
+        console.log(`Project scope: removed ${result.deleted.length} obsolete managed skill files`);
+      }
       if (result.skipped.length > 0) {
         console.log(`Project scope: skipped ${result.skipped.length} locally modified project skill files`);
       }

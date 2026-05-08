@@ -72,8 +72,9 @@ Use this skill when the user wants to bootstrap or maintain the CodexKit scaffol
 ## Natural Language Examples
 
 - `liệt kê skills debug` -> `npx @vhphuoc1102/codexkit list --target skills --query debug`
-- `cài skill frontend-design` -> `npx @vhphuoc1102/codexkit install --target skills --scope local --skills frontend-design`
-- `cài skill frontend` -> search first, then suggest exact matches such as `frontend-design`, `nextjs-react-expert`, or `tailwind-patterns`
+- `cài skill impeccable` -> `npx @vhphuoc1102/codexkit install --target skills --scope local --skills impeccable`
+- `cài skill frontend` -> search first, then suggest exact matches such as `impeccable`, `nextjs-react-expert`, or `tailwind-patterns`
+- `gỡ skill frontend-design cũ` -> `npx @vhphuoc1102/codexkit remove --target skills --scope local --skills frontend-design,web-design-guidelines`
 - `xem local codex đã cài skill gì` -> `npx @vhphuoc1102/codexkit list --target skills --scope local`
 - `đồng bộ lại plugin và skills` -> `npx @vhphuoc1102/codexkit sync-codex`
 - `dùng workflow impeccable của CodexKit` -> resolve to `.agents/workflows/impeccable.md` in the current repository and follow that workflow

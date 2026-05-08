@@ -111,7 +111,7 @@ description: Use for React or Next.js architecture and performance work, especia
 | API design patterns     | `$api-patterns`          |
 | Database optimization   | `$database-design`       |
 | Testing strategies      | `$testing-patterns`      |
-| UI/UX design principles | `$frontend-design`       |
+| UI/UX workflow          | `$impeccable shape`, `$impeccable craft`, `$impeccable audit`, or `$impeccable polish` |
 | TypeScript patterns     | typescript-expert (not included in this repo)     |
 | Deployment & DevOps     | `$deployment-procedures` |
 

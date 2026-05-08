@@ -29,12 +29,10 @@ const SKILL_DEFINITIONS = [
   ["python-patterns", "Backend & Platform", "Python project structure, async choices, and framework direction."],
   ["rust-pro", "Backend & Platform", "Modern Rust systems work, async design, and performance."],
   ["mcp-builder", "Backend & Platform", "Design principles for building MCP servers, tools, and resources."],
-  ["frontend-design", "Frontend & UI", "Web UI design systems, hierarchy, typography, and aesthetics."],
   ["mobile-design", "Frontend & UI", "Touch-first UX, mobile patterns, and platform conventions."],
   ["nextjs-react-expert", "Frontend & UI", "React or Next.js architecture, rendering, and performance."],
   ["tailwind-patterns", "Frontend & UI", "Tailwind CSS v4 patterns, tokens, and utility architecture."],
-  ["web-design-guidelines", "Frontend & UI", "UI audits against structured web interface guidelines."],
-  ["impeccable", "Frontend & UI", "Production-grade frontend interface design, critique, polish, and iteration."],
+  ["impeccable", "Frontend & UI", "Primary frontend UI/UX workflow for design, critique, audit, polish, and visual craft."],
   ["i18n-localization", "Frontend & UI", "Translations, locale files, RTL support, and hardcoded string checks."],
   ["game-development", "Frontend & UI", "Game-project routing and platform-specific game skill selection."],
   ["bug-hunt", "Debugging & Review", "Disciplined reproduction, scoping, and root-cause isolation."],
@@ -67,6 +65,23 @@ const SKILL_DEFINITIONS = [
 const SKILL_MAP = new Map(
   SKILL_DEFINITIONS.map(([name, category, summary]) => [name, { name, category, summary }])
 );
+
+const DEPRECATED_LOCAL_SKILLS = [
+  {
+    name: "frontend-design",
+    category: "Frontend & UI",
+    summary: "Deprecated local skill removal target; superseded by impeccable.",
+    installRelativePath: "frontend-design",
+    kind: "directory"
+  },
+  {
+    name: "web-design-guidelines",
+    category: "Frontend & UI",
+    summary: "Deprecated local skill removal target; superseded by impeccable audit and critique.",
+    installRelativePath: "web-design-guidelines",
+    kind: "directory"
+  }
+];
 
 function sourceEntryForSkill(skillsRoot, name) {
   return name === "doc" ? path.join(skillsRoot, "doc.md") : path.join(skillsRoot, name);
@@ -178,6 +193,21 @@ export async function getSelectedShippedSkills({ skillsRoot, skills }) {
   }
 
   return catalog.filter((skill) => selected.has(skill.name));
+}
+
+export async function getRemovableLocalSkills({ skillsRoot, skills }) {
+  const selected = normalizeSkillSelection(skills);
+  if (!selected) {
+    return getShippedSkills(skillsRoot);
+  }
+
+  const activeSkills = await getSelectedShippedSkills({ skillsRoot, skills });
+  const activeNames = new Set(activeSkills.map((skill) => skill.name));
+  const deprecatedSkills = DEPRECATED_LOCAL_SKILLS.filter(
+    (skill) => selected.has(skill.name) && !activeNames.has(skill.name)
+  );
+
+  return activeSkills.concat(deprecatedSkills);
 }
 
 export async function loadSkillTemplates(skill) {

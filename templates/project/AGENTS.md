@@ -40,13 +40,26 @@ When delegating to a subagent, include the preferred skill set in the task hando
 - Use `.agents/workflows/figma-to-code.md` when the task is to implement an existing Figma frame or flow into the current codebase.
 - Prefer the `implementer` subagent for scoped code changes after the task is clear.
 - Use `frontend_specialist`, `backend_specialist`, `database_architect`, or `mobile_developer` when domain-specific implementation work is clearly separated.
-- Load `clean-code`, `frontend-design`, `api-patterns`, `database-design`, or `nodejs-best-practices` only when they fit the stack.
+- Load `clean-code`, `impeccable`, `api-patterns`, `database-design`, or `nodejs-best-practices` only when they fit the stack.
   Preferred pairings:
-  `frontend_specialist` -> `clean-code`, `frontend-design`, `nextjs-react-expert`, `tailwind-patterns`, `web-design-guidelines`
-  `frontend_specialist` for Figma implementation -> `clean-code`, `frontend-design`, `web-design-guidelines`
+  `frontend_specialist` -> `clean-code`, `impeccable`, `nextjs-react-expert`, `tailwind-patterns`, `webapp-testing`
+  `frontend_specialist` for Figma implementation -> `clean-code`, `impeccable`, `webapp-testing`
   `backend_specialist` -> `clean-code`, `api-patterns`, `nodejs-best-practices`, `python-patterns`, `database-design`
   `database_architect` -> `database-design`, `clean-code`
   `mobile_developer` -> `mobile-design`, `clean-code`
+
+#### Impeccable Command Routing
+
+Use Impeccable as the primary UI/UX skill, but select the specific command instead of invoking it generically:
+
+- No project UI context: `$impeccable teach`; use `$impeccable document` when a visual design system needs to be captured.
+- PRD, business rules, or multi-screen UX: `.agents/workflows/screen-spec.md`, then `$impeccable shape`.
+- New UI implementation: `$impeccable shape`, wait for explicit brief confirmation, then `$impeccable craft`.
+- Existing UI design review: `$impeccable critique`.
+- Accessibility, responsive, theming, UI performance, or technical UI checks: `$impeccable audit`.
+- Final shipping pass: `$impeccable polish`.
+- Targeted UI fixes: `$impeccable adapt`, `$impeccable layout`, `$impeccable typeset`, `$impeccable clarify`, `$impeccable harden`, `$impeccable animate`, or `$impeccable colorize` based on the issue.
+- Live browser variant work: `$impeccable live` only when the user explicitly wants live visual iteration and a dev server is available.
 
 ### Debugging
 
@@ -70,7 +83,7 @@ When delegating to a subagent, include the preferred skill set in the task hando
   `performance_optimizer` -> `performance-profiling`, `nextjs-react-expert`
   `documentation_writer` -> `docs-shipper`, `documentation-templates`
   `docs_researcher` -> `mcp-onboarding`, `documentation-templates`, `mcp-builder`
-  `seo_specialist` -> `seo-fundamentals`, `geo-fundamentals`, `web-design-guidelines`
+  `seo_specialist` -> `seo-fundamentals`, `geo-fundamentals`, `performance-profiling`; add `$impeccable audit` when layout or UX affects discoverability
 
 ### Validation and Release
 
@@ -91,8 +104,8 @@ When delegating to a subagent, include the preferred skill set in the task hando
 | --- | --- | --- | --- |
 | `planner` | Break work into decisions, steps, and risks | read-heavy | `planning`, `plan-writing`, `architecture` |
 | `explorer` | Map unfamiliar code paths and dependency flow | read-only | `repo-onboarding`, `architecture`, `plan-writing`, `systematic-debugging` |
-| `implementer` | Make the smallest defensible code change | workspace-write | `clean-code`, `frontend-design`, `api-patterns`, `database-design` |
-| `frontend_specialist` | Build or refactor frontend UI and interaction layers | workspace-write | `frontend-design`, `nextjs-react-expert`, `tailwind-patterns` |
+| `implementer` | Make the smallest defensible code change | workspace-write | `clean-code`, `impeccable`, `api-patterns`, `database-design` |
+| `frontend_specialist` | Build or refactor frontend UI and interaction layers | workspace-write | `impeccable`, `nextjs-react-expert`, `tailwind-patterns`, `webapp-testing` |
 | `backend_specialist` | Implement APIs, services, and server-side logic | workspace-write | `api-patterns`, `nodejs-best-practices`, `python-patterns` |
 | `database_architect` | Design schemas, migrations, and query strategy | workspace-write | `database-design` |
 | `mobile_developer` | Build mobile-specific UX and application flows | workspace-write | `mobile-design` |

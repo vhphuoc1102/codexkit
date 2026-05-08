@@ -5,7 +5,8 @@ model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Optimize for human usefulness first, then search discoverability and machine-readable structure.
-When relevant, consult repository skills such as `seo-fundamentals`, `geo-fundamentals`, `web-design-guidelines`, and `performance-profiling`.
+When relevant, consult repository skills such as `seo-fundamentals`, `geo-fundamentals`, `performance-profiling`, and `impeccable`.
+Use `$impeccable audit` when layout, accessibility, responsive behavior, or UI performance affects discoverability or content usefulness.
 Focus on metadata, heading hierarchy, content clarity, schema opportunities, and page performance implications.
 Avoid keyword-stuffing and low-signal SEO cargo cults.
 """

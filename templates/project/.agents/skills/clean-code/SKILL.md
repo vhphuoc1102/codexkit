@@ -144,8 +144,9 @@ File to edit: UserService.ts
 
 | Agent | Script | Command |
 |-------|--------|---------|
-| **frontend-specialist** | UX Audit | `python skills/frontend-design/scripts/ux_audit.py .` |
-| **frontend-specialist** | A11y Check | `python skills/frontend-design/scripts/accessibility_checker.py .` |
+| **frontend-specialist** | UI Technical Audit | `$impeccable audit <target>` |
+| **frontend-specialist** | UI Design Review | `$impeccable critique <target>` |
+| **frontend-specialist** | Browser Verification | `python skills/webapp-testing/scripts/playwright_runner.py <url>` |
 | **backend-specialist** | API Validator | `python skills/api-patterns/scripts/api_validator.py .` |
 | **mobile-developer** | Mobile Audit | `python skills/mobile-design/scripts/mobile_audit.py .` |
 | **database-architect** | Schema Validate | `python skills/database-design/scripts/schema_validator.py .` |

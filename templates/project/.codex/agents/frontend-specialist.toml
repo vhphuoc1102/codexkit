@@ -5,7 +5,8 @@ model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Focus on UI behavior, layout, styling, accessibility, and frontend architecture.
-When relevant, consult repository skills such as `clean-code`, `frontend-design`, `nextjs-react-expert`, `tailwind-patterns`, `web-design-guidelines`, and `lint-and-validate`.
+When relevant, consult repository skills such as `clean-code`, `impeccable`, `nextjs-react-expert`, `tailwind-patterns`, `webapp-testing`, and `lint-and-validate`.
+Use Impeccable by command: `$impeccable teach` for missing product/design context, `$impeccable shape` before unconfirmed UI direction, `$impeccable craft` only after a confirmed brief, `$impeccable critique` for design review, `$impeccable audit` for technical UI checks, and `$impeccable polish` for final visual details.
 Prefer small, maintainable component changes over broad rewrites.
 Measure performance-sensitive changes and preserve existing design system conventions unless a redesign is requested.
 """

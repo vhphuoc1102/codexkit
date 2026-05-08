@@ -4,6 +4,7 @@ import { sha256 } from "./hash.js";
 import { MANIFEST_PATH, readManifest, writeManifest } from "./manifest.js";
 import {
   getInstalledShippedSkills,
+  getRemovableLocalSkills,
   getSelectedShippedSkills,
   loadSkillTemplates
 } from "./skills.js";
@@ -95,15 +96,24 @@ async function writeProjectSubset({
   existingManifest,
   featurePatch = {},
   replacePaths = [],
+  cleanupObsoletePrefixes = [],
   force = false,
   dryRun = false,
   syncMode = false
 }) {
   const manifestByPath = new Map((existingManifest?.files || []).map((file) => [file.path, file]));
   const replaceSet = new Set(replacePaths);
-  const nextManifestFiles = (existingManifest?.files || []).filter((file) => !replaceSet.has(file.path));
+  const templatePathSet = new Set(templates.map((template) => normalizePath(template.relativePath)));
+  const cleanupPrefixes = cleanupObsoletePrefixes.map((prefix) => normalizePath(prefix));
+  const shouldCleanupObsolete = (file) =>
+    cleanupPrefixes.some((prefix) => file.path.startsWith(prefix)) && !templatePathSet.has(file.path);
+  const nextManifestFiles = (existingManifest?.files || []).filter(
+    (file) => !replaceSet.has(file.path) && !shouldCleanupObsolete(file)
+  );
   const written = [];
   const skipped = [];
+  const deleted = [];
+  const obsolete = [];
 
   for (const template of templates) {
     const relativePath = normalizePath(template.relativePath);
@@ -140,6 +150,36 @@ async function writeProjectSubset({
     });
   }
 
+  for (const previous of existingManifest?.files || []) {
+    if (!shouldCleanupObsolete(previous)) {
+      continue;
+    }
+
+    const destination = path.join(targetDir, previous.path);
+    const currentHash = await getCurrentHash(destination);
+    if (currentHash === null) {
+      obsolete.push(previous.path);
+      continue;
+    }
+
+    const isLocallyModified =
+      previous.installedHash &&
+      currentHash !== previous.installedHash;
+
+    if (isLocallyModified && !force) {
+      skipped.push(previous.path);
+      nextManifestFiles.push(previous);
+      continue;
+    }
+
+    if (!dryRun) {
+      await removePath(destination);
+    }
+
+    deleted.push(previous.path);
+    obsolete.push(previous.path);
+  }
+
   if (!dryRun) {
     await writeManifest(
       targetDir,
@@ -147,7 +187,7 @@ async function writeProjectSubset({
     );
   }
 
-  return { written, skipped };
+  return { written, skipped, deleted, obsolete };
 }
 
 async function ensurePluginMarketplace({ targetDir, dryRun = false }) {
@@ -268,7 +308,7 @@ export async function removeLocalSkills({
   const removed = [];
   const skipped = [];
 
-  const removableSkills = await getSelectedShippedSkills({ skillsRoot, skills });
+  const removableSkills = await getRemovableLocalSkills({ skillsRoot, skills });
 
   for (const skill of removableSkills) {
     const destination = path.join(targetDir, skill.installRelativePath);
@@ -553,6 +593,7 @@ export async function syncProjectSkills({
     version,
     existingManifest,
     replacePaths,
+    cleanupObsoletePrefixes: [`${PROJECT_SKILLS_TARGET_ROOT}/`, `${PROJECT_SHARED_TARGET_ROOT}/`],
     force,
     dryRun,
     syncMode: true
