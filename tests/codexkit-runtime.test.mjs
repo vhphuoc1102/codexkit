@@ -7,6 +7,13 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  removeLocalSkills,
+  syncProjectSkills,
+} from "../src/lib/kit.js";
+import {
+  getSelectedShippedSkills,
+} from "../src/lib/skills.js";
+import {
   buildDefaultState,
   readCodexKitHandoff,
   writeCodexKitHandoff,
@@ -22,6 +29,7 @@ import {
 
 const ROOT = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
 const TEMPLATE_ROOT = path.join(ROOT, "templates", "project");
+const SKILLS_ROOT = path.join(TEMPLATE_ROOT, ".agents", "skills");
 const PRE_TOOL_HOOK = path.join(TEMPLATE_ROOT, ".codex", "hooks", "codexkit_pre_tool_use.mjs");
 const SESSION_START_HOOK = path.join(TEMPLATE_ROOT, ".codex", "hooks", "codexkit_session_start.mjs");
 const STATUS_SCRIPT = path.join(TEMPLATE_ROOT, ".codex", "codexkit_status.mjs");
@@ -270,4 +278,98 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   const pluginSkill = fs.readFileSync(path.join(ROOT, "plugins", "codexkit", "skills", "codexkit", "SKILL.md"), "utf8");
   assert.match(pluginSkill, /`swarm`, `run ready beads`, `parallel beads` -> `execute`/);
   assert.match(pluginSkill, /execute br-123/);
+});
+
+test("frontend UI routing uses impeccable instead of retired frontend skills", async () => {
+  const shippedSkills = await getSelectedShippedSkills({ skillsRoot: SKILLS_ROOT });
+  const shippedNames = new Set(shippedSkills.map((skill) => skill.name));
+  assert.equal(shippedNames.has("impeccable"), true);
+  assert.equal(shippedNames.has("frontend-design"), false);
+  assert.equal(shippedNames.has("web-design-guidelines"), false);
+  assert.equal(fs.existsSync(path.join(SKILLS_ROOT, "impeccable", "SKILL.md")), true);
+  assert.equal(fs.existsSync(path.join(SKILLS_ROOT, "frontend-design")), false);
+  assert.equal(fs.existsSync(path.join(SKILLS_ROOT, "web-design-guidelines")), false);
+
+  const routingFiles = [
+    "AGENTS.md",
+    "AGENT_FLOW.md",
+    ".agents/workflows/figma-to-code.md",
+    ".codex/agents/frontend-specialist.toml",
+    ".codex/agents/implementer.toml",
+    ".codex/agents/seo-specialist.toml",
+    ".agents/skills/clean-code/SKILL.md",
+    ".agents/skills/nextjs-react-expert/SKILL.md",
+  ];
+
+  for (const relativePath of routingFiles) {
+    const content = fs.readFileSync(path.join(TEMPLATE_ROOT, relativePath), "utf8");
+    assert.doesNotMatch(content, /frontend-design/, relativePath);
+    assert.doesNotMatch(content, /web-design-guidelines/, relativePath);
+  }
+
+  const agentsGuide = fs.readFileSync(path.join(TEMPLATE_ROOT, "AGENTS.md"), "utf8");
+  assert.match(agentsGuide, /Impeccable Command Routing/);
+  assert.match(agentsGuide, /\$impeccable shape/);
+  assert.match(agentsGuide, /\$impeccable craft/);
+  assert.match(agentsGuide, /\$impeccable audit/);
+  assert.match(agentsGuide, /\$impeccable polish/);
+});
+
+test("deprecated local frontend skills can still be removed", async () => {
+  const codexHome = fs.mkdtempSync(path.join(os.tmpdir(), "codexkit-local-skills-"));
+  const localSkillsRoot = path.join(codexHome, "skills");
+  const retiredSkills = ["frontend-design", "web-design-guidelines"];
+
+  for (const skill of retiredSkills) {
+    const skillPath = path.join(localSkillsRoot, skill);
+    fs.mkdirSync(skillPath, { recursive: true });
+    fs.writeFileSync(path.join(skillPath, "SKILL.md"), `---\nname: ${skill}\n---\n`, "utf8");
+  }
+
+  const result = await removeLocalSkills({
+    skillsRoot: SKILLS_ROOT,
+    codexHome,
+    skills: retiredSkills,
+  });
+
+  assert.equal(result.removed.length, 2);
+  assert.equal(fs.existsSync(path.join(localSkillsRoot, "frontend-design")), false);
+  assert.equal(fs.existsSync(path.join(localSkillsRoot, "web-design-guidelines")), false);
+});
+
+test("project skill sync removes obsolete managed retired skill files", async () => {
+  const repoRoot = makeRepo();
+  const obsoletePath = ".agents/skills/frontend-design/SKILL.md";
+  const obsoleteAbsolutePath = path.join(repoRoot, obsoletePath);
+  fs.mkdirSync(path.dirname(obsoleteAbsolutePath), { recursive: true });
+  fs.writeFileSync(obsoleteAbsolutePath, "# retired\n", "utf8");
+  fs.writeFileSync(
+    path.join(repoRoot, ".codexkit", "manifest.json"),
+    `${JSON.stringify(
+      {
+        version: "test",
+        managedAt: new Date().toISOString(),
+        features: {},
+        files: [
+          {
+            path: obsoletePath,
+            templateHash: "retired",
+            installedHash: null,
+          },
+        ],
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+
+  const result = await syncProjectSkills({
+    targetDir: repoRoot,
+    templateRoot: TEMPLATE_ROOT,
+    version: "test",
+  });
+
+  assert.equal(result.deleted.includes(obsoletePath), true);
+  assert.equal(fs.existsSync(obsoleteAbsolutePath), false);
 });

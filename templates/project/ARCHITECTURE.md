@@ -28,7 +28,6 @@ The goal is to keep the system small, composable, and explicit. Skills provide k
 |   |   |-- clean-code/
 |   |   |-- code-review/
 |   |   |-- debugging/
-|   |   |-- frontend-design/
 |   |   |-- api-patterns/
 |   |   |-- database-design/
 |   |   |-- impeccable/
@@ -175,7 +174,7 @@ Shared packages live in `.agents/.shared/`.
 
 Use them when a workflow needs executable tooling or structured datasets that do not naturally belong to a single skill.
 
-Impeccable is intentionally shipped as a skill at `.agents/skills/impeccable/`, not as a shared package, because it owns a full instruction contract, references, and helper scripts for UI/UX work. Its upstream attribution and Apache 2.0 license notes live in `.agents/skills/impeccable/NOTICE.md`.
+Impeccable is intentionally shipped as a skill at `.agents/skills/impeccable/`, not as a shared package, because it owns the primary UI/UX instruction contract, command references, and helper scripts for frontend design work. Its upstream attribution and Apache 2.0 license notes live in `.agents/skills/impeccable/NOTICE.md`.
 
 ### Subagents
 

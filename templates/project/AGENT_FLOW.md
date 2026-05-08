@@ -66,8 +66,8 @@ Examples:
 - `bug-hunt` for reproduction-led debugging
 - `debugging` for reproduction and evidence gathering
 - `clean-code` for scoped implementation quality
-- `frontend-design` for UI-heavy work
-- `frontend-design` plus `web-design-guidelines` for Figma-to-code work
+- `impeccable` for UI/UX direction, critique, audit, polish, and visual craft
+- `impeccable` plus `webapp-testing` for Figma-to-code and browser-verified UI work
 - `tailwind-patterns` for Tailwind-first implementation details
 - `nextjs-react-expert` for React or Next.js UI performance concerns
 - `api-patterns` or `database-design` for server-side structure changes
@@ -78,6 +78,17 @@ Examples:
 - `release-readiness` for rollout-sensitive work
 
 The default rule is minimal loading. Do not load broad stacks of skills without evidence they are needed.
+
+For Impeccable, choose a command that matches the work:
+
+- `$impeccable teach` when PRODUCT.md or project design context is missing
+- `$impeccable document` to capture an existing visual system into DESIGN.md
+- `$impeccable shape` before implementation when UX/UI direction is not confirmed
+- `$impeccable craft` only after a confirmed shape brief
+- `$impeccable critique` for UX/design review
+- `$impeccable audit` for accessibility, responsive, theming, UI performance, and anti-pattern checks
+- `$impeccable polish` for final pre-ship detail work
+- `$impeccable adapt`, `$impeccable layout`, `$impeccable typeset`, `$impeccable clarify`, `$impeccable harden`, `$impeccable animate`, or `$impeccable colorize` for targeted UI fixes
 
 ## 4. Subagent Assignment
 

@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.13] - 2026-05-08
+
+Release: [v0.1.13](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.13)
+
+### Changed
+
+- Removed the legacy `frontend-design` and `web-design-guidelines` shipped skills. Impeccable is now the primary UI/UX workflow for frontend design, critique, audit, polish, and visual craft.
+- Updated frontend routing, subagent guidance, Figma-to-code workflow guidance, and cross-skill references to use explicit Impeccable commands such as `$impeccable shape`, `$impeccable craft`, `$impeccable critique`, `$impeccable audit`, and `$impeccable polish`.
+
+### Migration
+
+- Project scaffold updates remove obsolete managed files for the retired skills when they have not been locally modified.
+- To clean old local Codex skills, run `codexkit remove --target skills --scope local --skills frontend-design,web-design-guidelines`.
+
 ## [v0.1.12] - 2026-05-08
 
 Release: [v0.1.12](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.12)

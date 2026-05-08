@@ -8,9 +8,9 @@ Turn a specific Figma frame or node into production code that matches the reposi
 
 ## Best Paired Skills
 
-- `frontend-design` for layout, visual translation, and UI judgment
+- `impeccable` for visual translation, UI judgment, critique, audit, and polish
 - `clean-code` for scoped implementation quality
-- `web-design-guidelines` for accessibility and interaction review
+- `webapp-testing` for browser-based responsive and interaction verification
 
 ## Best Paired Tools
 
@@ -35,10 +35,13 @@ If those conditions are not met, route first to `plan`, `screen-spec`, or `impec
 4. Inspect the target code path, shared components, tokens, and existing patterns.
 5. Reuse the current design system instead of creating duplicate components or ad hoc styles.
 6. Implement the screen in small increments, preserving responsive behavior and interaction details.
-7. Run the local preview and compare the implementation against the Figma reference.
-8. Use browser-based checks to verify layout, spacing, states, and responsive behavior.
-9. Iterate until the implementation is close enough to the design or the remaining mismatch is explicitly documented.
-10. Run `check` before presenting the result.
+7. Run `$impeccable critique` when the implementation needs design judgment against the reference.
+8. Run `$impeccable audit` for accessibility, responsive, theming, and technical UI checks.
+9. Run the local preview and compare the implementation against the Figma reference.
+10. Use browser-based checks to verify layout, spacing, states, and responsive behavior.
+11. Run `$impeccable polish` for final visual details when meaningful differences remain.
+12. Iterate until the implementation is close enough to the design or the remaining mismatch is explicitly documented.
+13. Run `check` before presenting the result.
 
 ## Suggested Sequence
 
@@ -47,8 +50,10 @@ If those conditions are not met, route first to `plan`, `screen-spec`, or `impec
 3. `get_screenshot` for the exact variant and breakpoint
 4. inspect the repository implementation path and design system
 5. implement the UI
-6. run preview and browser verification
-7. summarize what matches and what remains approximate
+6. run `$impeccable critique` or `$impeccable audit` based on the risk
+7. run preview and browser verification
+8. use `$impeccable polish` for final visual details when needed
+9. summarize what matches and what remains approximate
 
 ## Output Shape
 
