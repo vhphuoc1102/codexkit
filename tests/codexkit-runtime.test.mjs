@@ -280,6 +280,56 @@ test("scaffold ships unified execute workflow, helpers, hooks, and routing alias
   assert.match(pluginSkill, /execute br-123/);
 });
 
+test("screen spec workflow creates traceable business-to-screen artifacts", () => {
+  const workflowPath = path.join(TEMPLATE_ROOT, ".agents", "workflows", "screen-spec.md");
+  const templatePath = path.join(
+    TEMPLATE_ROOT,
+    ".agents",
+    "workflows",
+    "screen-spec-references",
+    "output-template.md",
+  );
+
+  assert.equal(fs.existsSync(workflowPath), true);
+  assert.equal(fs.existsSync(templatePath), true);
+
+  const workflow = fs.readFileSync(workflowPath, "utf8");
+  assert.match(workflow, /`CONTEXT\.md` at the repo root/);
+  assert.match(workflow, /docs\/CONTEXT\.md/);
+  assert.match(workflow, /docs\/adr\//);
+  assert.match(workflow, /docs\/decisions\//);
+  assert.match(workflow, /docs\/screen-specs\/<feature-slug>\.md/);
+  assert.match(workflow, /screen-spec-references\/output-template\.md/);
+  assert.match(workflow, /REQ-001/);
+  assert.match(workflow, /ADR-001/);
+  assert.match(workflow, /Every requirement must map to at least one screen, flow, form field, table column, interaction, state, or open question/);
+  assert.match(workflow, /Every form field, table column, and interaction should cite a requirement or ADR/);
+  assert.match(workflow, /Group by user flow and user outcome/);
+  assert.match(workflow, /\$impeccable shape/);
+
+  const template = fs.readFileSync(templatePath, "utf8");
+  assert.match(template, /## Requirements Reference/);
+  assert.match(template, /\| ID \| Source \| Text \| Screens \|/);
+  assert.match(template, /## Actors \/ Roles/);
+  assert.match(template, /## Screen Inventory/);
+  assert.match(template, /## Screen Flow/);
+  assert.match(template, /```mermaid/);
+  assert.match(template, /#### Components/);
+  assert.match(template, /#### Forms/);
+  assert.match(template, /\| Form \| Field \| Type \| Required \| Validation \| Default \/ Source \| Business Rule \|/);
+  assert.match(template, /#### Tables \/ Lists/);
+  assert.match(template, /\| Table \| Column \| Data Source \| Sort \/ Filter \/ Search \| Row \/ Batch Actions \| Business Rule \|/);
+  assert.match(template, /#### Interactions/);
+  assert.match(template, /\| Action \| Trigger \| Result \| Business Rule \|/);
+  assert.match(template, /#### States/);
+  assert.match(template, /\| State \| When \| UI Behavior \|/);
+  assert.match(template, /#### Business Rules/);
+  assert.match(template, /## Shared UI Patterns/);
+  assert.match(template, /## Open Questions/);
+  assert.match(template, /## Next Steps/);
+  assert.match(template, /\$impeccable shape/);
+});
+
 test("frontend UI routing uses impeccable instead of retired frontend skills", async () => {
   const shippedSkills = await getSelectedShippedSkills({ skillsRoot: SKILLS_ROOT });
   const shippedNames = new Set(shippedSkills.map((skill) => skill.name));

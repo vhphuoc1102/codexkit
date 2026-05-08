@@ -1,107 +1,137 @@
 # Screen Spec Workflow
 
-Use this workflow when the user has product requirements, business logic, a PRD, or feature rules and needs to turn them into implementation-ready UX architecture before visual design.
+Use this workflow when the user has product requirements, business logic, a PRD, feature rules, `CONTEXT.md`, or ADRs and needs to turn them into implementation-ready UX architecture before visual design.
+
+This workflow produces a durable screen architecture artifact. It does not decide visual style.
 
 ## Goal
 
-Produce a screen specification that explains which screens exist, how they connect, what each screen contains, which business rules appear in the UI, and what states must be designed.
+Produce a screen specification that explains which screens exist, how they connect, what each screen contains, which forms, fields, tables, columns, interactions, states, and business rules must exist, and which requirements each part satisfies.
+
+Default output artifact:
+
+```text
+docs/screen-specs/<feature-slug>.md
+```
+
+Use the canonical template:
+
+```text
+.agents/workflows/screen-spec-references/output-template.md
+```
 
 ## Process
 
-1. Read the PRD, business rules, existing plan, local issue, or user-provided requirements.
-2. Identify actors, roles, permissions, and primary jobs-to-be-done.
-3. Extract the required screens and flows.
-4. Map business rules to visible UI behavior.
-5. Define states and edge cases per screen.
-6. Produce a handoff that `$impeccable shape` can use as task scope.
+### 1. Discover Context
 
-## Output Shape
+Before asking the user for source material, search the repository for business and decision context:
 
-### Feature Summary
+- `CONTEXT.md` at the repo root
+- `docs/CONTEXT.md`
+- any `CONTEXT.md` files under `docs/`
+- ADRs under `docs/adr/`
+- decision records under `docs/decisions/`
+- the PRD, existing plan, local issue, Bead, or user-provided requirements
 
-- What this feature does
-- Who uses it
-- Primary outcome
+If `CONTEXT.md`, ADRs, decision records, PRD, plan, issue, and user-provided requirements are all missing, ask the user for source context before writing a spec.
 
-### Actors / Roles
+List every source used in the final artifact. If expected sources are missing, state that explicitly.
 
-- actor or role name
-- permissions or constraints
-- main jobs-to-be-done
+### 2. Extract Requirements
 
-### Screen Inventory
+Extract screen-relevant requirements from the discovered sources:
 
-For each screen:
+- actors, roles, permissions, and constraints
+- primary jobs-to-be-done
+- business rules that affect UI behavior
+- data-entry needs, including forms and fields
+- table, list, or reporting needs, including columns and row actions
+- validation, empty, loading, error, success, and permission behavior
+- ADR constraints that affect screen structure, navigation, data visibility, or interactions
 
-- **Screen name**
-- **Route or screen ID**
-- **Purpose**
-- **Primary user action**
-- **Data displayed**
-- **Data collected**
-- **Components**
-- **Business rules visible on this screen**
-- **States**
-  - default
-  - loading
-  - empty
-  - error
-  - validation
-  - permission denied
-  - success
+Assign trace IDs:
 
-### Screen Flow
+- `REQ-001`, `REQ-002`, etc. for product, business, and UX requirements
+- `ADR-001`, `ADR-002`, etc. for ADR-derived or decision-record constraints
 
-Describe:
+Preserve source paths or source names in the requirements reference table.
+
+### 3. Identify Screens
+
+Identify screens by user flow, not by technical module.
+
+For each screen, determine:
+
+- purpose
+- entry points and exits
+- primary user action
+- displayed data
+- collected data
+- forms and fields
+- tables, lists, columns, filters, sorting, and row or batch actions
+- components
+- interactions
+- states and edge cases
+- business rule mapping
+
+Every screen must satisfy at least one `REQ-###` or `ADR-###`, or be explicitly marked as supporting infrastructure.
+
+### 4. Write The Spec
+
+Write or update:
+
+```text
+docs/screen-specs/<feature-slug>.md
+```
+
+Use `.agents/workflows/screen-spec-references/output-template.md` as the output shape.
+
+Every requirement must map to at least one screen, flow, form field, table column, interaction, state, or open question.
+
+Every form field, table column, and interaction should cite a requirement or ADR when business logic drives it.
+
+### 5. Draw The Screen Flow
+
+Include a Mermaid flowchart covering:
 
 - entry points
-- exits
-- back and cancel behavior
+- happy path
+- error paths
+- validation paths
+- cancel and back behavior
 - destructive or confirmation paths
 - cross-screen dependencies
 
-Use Mermaid when helpful:
+Use user-facing screen names in the diagram. Do not use internal module names unless users also see them.
 
-```mermaid
-flowchart TD
-  A["Entry"] --> B["Screen"]
-  B --> C["Success"]
-  B --> D["Error"]
-```
+## Output Contract
 
-### Shared UI Patterns
+The artifact must include:
 
-Define patterns that should stay consistent:
-
-- navigation model
-- layout shell
-- forms
-- tables or lists
-- modals or drawers
-- notifications
-- permissions and disabled-state behavior
-
-### Acceptance Criteria Per Screen
-
-For each screen, list concrete criteria the implementation must satisfy.
-
-### Open Questions
-
-List unresolved product or UX questions. Do not hide decisions that affect screen count, navigation, validation, or data requirements.
-
-### Handoff To Impeccable
-
-Summarize:
-
-- what `$impeccable shape` should use as task scope
-- which screens need visual direction
-- which screens are dense product UI
-- which screens are brand or marketing UI
-- which states need special attention
+- source context summary
+- requirements reference table with `ID | Source | Text | Screens`
+- actors and roles table
+- screen inventory table
+- Mermaid screen flow
+- screen details for each screen:
+  - components table
+  - forms table: `Form | Field | Type | Required | Validation | Default/Source | Business Rule`
+  - tables table: `Table | Column | Data Source | Sort/Filter/Search | Row/Batch Actions | Business Rule`
+  - interactions table: `Action | Trigger | Result | Business Rule`
+  - states table: `State | When | UI Behavior`
+  - business rules with `REQ-###` and `ADR-###` references
+- shared UI patterns
+- open questions
+- next steps and handoff to `$impeccable shape`
 
 ## Rules
 
-- Do not design visual style here. This workflow defines UX architecture.
-- Do not skip states. Missing empty, error, validation, and permission states become implementation defects.
-- Do not invent backend behavior. If a business rule is unclear, list it as an open question.
-- Keep screen specs concrete enough for implementation and for `$impeccable shape`.
+- Do not design visual style here. No color, font, brand treatment, illustration, spacing, or visual polish decisions.
+- Do not invent backend behavior or product rules. If a rule is unclear, list it as an open question.
+- Do not skip forms, fields, tables, columns, validations, or permissions when the requirements imply data entry or data review.
+- Do not group screens by technical module. Group by user flow and user outcome.
+- Do not hide ADR conflicts. If the screen spec contradicts an ADR or decision record, call it out explicitly.
+- Every screen must satisfy at least one requirement or be marked as supporting infrastructure.
+- Every requirement must map to a screen, flow, form field, table column, interaction, state, or open question.
+- Missing empty, loading, error, validation, permission denied, and success states become implementation defects.
+- `$impeccable shape` consumes this artifact for UX and visual direction. It should not change required fields, columns, or business rules unless it raises an explicit open question.
