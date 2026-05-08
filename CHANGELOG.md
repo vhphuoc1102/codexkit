@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [v0.1.10] - 2026-05-08
+
+Release: [v0.1.10](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.10)
+
+### Improved
+
+- Refreshed the vendored Impeccable project skill against the official `pbakaus/impeccable` `skill-v3.0.7` release.
+
 ## [v0.1.8] - 2026-05-06
 
 Release: [v0.1.8](https://github.com/vhphuoc1102/codexkit/releases/tag/v0.1.8)
